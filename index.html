@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Survivors - Epic Survival Adventure Game</title>
+    <link rel="canonical" href="https://monstersurvivors.com" />
+    <meta name="description" content="Play Monster Survivors - An epic survival adventure where you battle against waves of monsters in this thrilling online game. Experience intense action and strategic gameplay.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f7;
+        }
+        .game-container {
+            aspect-ratio: 16/9;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="bg-white shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">Monster Survivors</h1>
+                <div class="flex space-x-4">
+                    <a href="#about" class="text-gray-600 hover:text-gray-900">About</a>
+                    <a href="#gameplay" class="text-gray-600 hover:text-gray-900">Gameplay</a>
+                    <a href="#play" class="text-gray-600 hover:text-gray-900">Play Now</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <section id="hero" class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">Survive the Monster Apocalypse</h2>
+            <p class="text-xl text-gray-600 mb-8">Embark on an epic journey of survival in this thrilling action-packed adventure game</p>
+        </section>
+
+        <section id="game" class="mb-16">
+            <div class="game-container bg-white rounded-lg shadow-lg overflow-hidden">
+                <iframe 
+                    src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" 
+                    class="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </section>
+
+        <section id="about" class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">About Monster Survivors</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Game Overview</h3>
+                    <p class="text-gray-600">Monster Survivors is an intense survival game that puts your skills to the ultimate test. Face waves of increasingly challenging monsters, upgrade your abilities, and fight to survive in this action-packed adventure.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Key Features</h3>
+                    <ul class="list-disc list-inside text-gray-600 space-y-2">
+                        <li>Dynamic combat system</li>
+                        <li>Progressive difficulty</li>
+                        <li>Character upgrades</li>
+                        <li>Multiple monster types</li>
+                        <li>Engaging gameplay mechanics</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="gameplay" class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">How to Play</h2>
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <p class="text-gray-600 mb-4">Use your mouse or touch controls to move your character and fight against waves of monsters. Collect experience points to level up and unlock powerful abilities. The longer you survive, the more challenging the game becomes.</p>
+                <div class="mt-4">
+                    <a href="#game" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        Play Now
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white border-t mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <p class="text-center text-gray-600">© 2024 Monster Survivors. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 
