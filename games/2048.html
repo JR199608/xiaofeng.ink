@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 - 小风游戏</title>
+    <link rel="canonical" href="https://xiaofeng.ink/games/2048" />
+    <meta name="description" content="2048 - 经典的数字益智游戏，通过合并相同的数字来获得更高的分数。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f7;
+        }
+        .game-container {
+            aspect-ratio: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="bg-white shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <a href="/" class="text-2xl font-bold text-gray-900">小风游戏</a>
+                <div class="flex space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-gray-900">返回首页</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <section class="mb-16">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">2048</h1>
+            <p class="text-xl text-gray-600 mb-8">经典的数字益智游戏</p>
+            
+            <div class="game-container bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+                <iframe 
+                    src="https://play2048.co/" 
+                    class="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">游戏介绍</h2>
+                    <p class="text-gray-600">2048是一款简单而富有挑战性的数字益智游戏。通过上下左右移动数字方块，将相同的数字合并，最终目标是获得2048这个数字。</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">游戏特色</h2>
+                    <ul class="list-disc list-inside text-gray-600 space-y-2">
+                        <li>简单易上手的操作</li>
+                        <li>富有挑战性的游戏性</li>
+                        <li>清晰的数字显示</li>
+                        <li>实时分数统计</li>
+                        <li>支持触摸操作</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm mt-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">游戏操作说明</h2>
+                <p class="text-gray-600">使用方向键或滑动来移动数字方块。相同数字的方块相撞时会合并成它们的和。每次移动后，会在空位置随机出现一个新的数字（2或4）。</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white border-t mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <p class="text-center text-gray-600">© 2024 小风游戏. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 

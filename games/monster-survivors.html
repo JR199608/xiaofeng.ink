@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Survivors - 小风游戏</title>
+    <link rel="canonical" href="https://xiaofeng.ink/games/monster-survivors" />
+    <meta name="description" content="Monster Survivors - 在怪物浪潮中生存的刺激冒险游戏。面对一波又一波的怪物，升级你的能力，在这个充满动作的冒险中生存下来。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f7;
+        }
+        .game-container {
+            aspect-ratio: 16/9;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="bg-white shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <a href="/" class="text-2xl font-bold text-gray-900">小风游戏</a>
+                <div class="flex space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-gray-900">返回首页</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <section class="mb-16">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Monster Survivors</h1>
+            <p class="text-xl text-gray-600 mb-8">在怪物浪潮中生存的刺激冒险游戏</p>
+            
+            <div class="game-container bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+                <iframe 
+                    src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" 
+                    class="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">游戏介绍</h2>
+                    <p class="text-gray-600">Monster Survivors 是一款刺激的生存游戏，将考验你的技能极限。面对一波又一波越来越具有挑战性的怪物，升级你的能力，在这个充满动作的冒险中生存下来。</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">游戏特色</h2>
+                    <ul class="list-disc list-inside text-gray-600 space-y-2">
+                        <li>动态战斗系统</li>
+                        <li>渐进式难度</li>
+                        <li>角色升级</li>
+                        <li>多种怪物类型</li>
+                        <li>引人入胜的游戏机制</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm mt-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">游戏操作说明</h2>
+                <p class="text-gray-600">使用鼠标或触摸控制来移动角色并与怪物战斗。收集经验值来升级并解锁强大的能力。生存时间越长，游戏难度就越大。</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white border-t mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <p class="text-center text-gray-600">© 2024 小风游戏. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 
