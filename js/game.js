@@ -552,11 +552,12 @@ function createLevelUpCelebration() {
     // 创建内容容器
     const container = document.createElement('div');
     container.style.backgroundColor = 'white';
-    container.style.padding = '40px 60px';
+    container.style.padding = window.innerWidth <= 768 ? '20px 30px' : '40px 60px';
     container.style.borderRadius = '20px';
     container.style.textAlign = 'center';
     container.style.position = 'relative';
-    container.style.maxWidth = '80%';
+    container.style.width = window.innerWidth <= 768 ? '90%' : '60%';
+    container.style.maxWidth = window.innerWidth <= 768 ? '400px' : '600px';
     container.style.animation = 'levelUpPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
     container.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
 
@@ -590,22 +591,40 @@ function createLevelUpCelebration() {
             from { transform: translateX(-50px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        @media screen and (max-width: 768px) {
+            .level-up-emoji {
+                font-size: 50px !important;
+                margin-bottom: 15px !important;
+            }
+            .level-up-title {
+                font-size: 24px !important;
+                margin-bottom: 8px !important;
+            }
+            .level-up-message {
+                font-size: 18px !important;
+                margin-bottom: 15px !important;
+            }
+            .level-up-rewards {
+                font-size: 14px !important;
+                padding: 8px !important;
+            }
+        }
     `;
     document.head.appendChild(style);
 
     // 添加内容
     container.innerHTML = `
-        <div style="font-size: 80px; margin-bottom: 20px; animation: emojiJump 0.8s ease-in-out infinite">
+        <div class="level-up-emoji" style="font-size: 80px; margin-bottom: 20px; animation: emojiJump 0.8s ease-in-out infinite">
             🎉
         </div>
-        <div style="font-size: 36px; font-weight: bold; color: #FF6B6B; margin-bottom: 10px; animation: textGlow 2s ease-in-out infinite">
+        <div class="level-up-title" style="font-size: 36px; font-weight: bold; color: #FF6B6B; margin-bottom: 10px; animation: textGlow 2s ease-in-out infinite">
             升级到 ${gameState.level} 级！<br>
             Level ${gameState.level} Reached!
         </div>
-        <div style="font-size: 24px; color: #666; margin-bottom: 20px; animation: slideIn 0.5s ease-out">
+        <div class="level-up-message" style="font-size: 24px; color: #666; margin-bottom: 20px; animation: slideIn 0.5s ease-out">
             ${message.cn}<br>${message.en}
         </div>
-        <div style="font-size: 18px; color: #2ecc71; padding: 10px; border: 2px dashed #2ecc71; border-radius: 10px">
+        <div class="level-up-rewards" style="font-size: 18px; color: #2ecc71; padding: 10px; border: 2px dashed #2ecc71; border-radius: 10px">
             获得奖励 / Rewards:<br>
             技能点 +1 / Skill Point +1<br>
             体力回满啦！/ Energy Restored!
@@ -636,6 +655,26 @@ function createLevelUpCelebration() {
             overlay.remove();
             style.remove();
         }, 300);
+    }, 3000);
+
+    // 监听窗口大小变化
+    const handleResize = () => {
+        if (window.innerWidth <= 768) {
+            container.style.padding = '20px 30px';
+            container.style.width = '90%';
+            container.style.maxWidth = '400px';
+        } else {
+            container.style.padding = '40px 60px';
+            container.style.width = '60%';
+            container.style.maxWidth = '600px';
+        }
+    };
+
+    window.addEventListener('resize', handleResize);
+    
+    // 清理事件监听
+    setTimeout(() => {
+        window.removeEventListener('resize', handleResize);
     }, 3000);
 }
 

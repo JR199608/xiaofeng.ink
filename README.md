@@ -1,46 +1,97 @@
-# 打工人升级记
+# 打工人游戏 / Working People Game
 
-一个简单的网页游戏，模拟现代社会打工人的生活和成长。
+一个关于打工人生活的趣味模拟游戏。
+A fun simulation game about the life of working people.
 
-## 游戏介绍
+## 游戏特色 / Game Features
 
-在这个游戏中，你将扮演一名普通的打工人，通过不断工作获取收入和经验，提升自己的技能，解锁更高级的工作岗位。
+1. **工作系统 / Work System**：
+   - 多种工作选择 / Multiple job options
+   - 收入与经验值系统 / Income and experience system
+   - 体力消耗管理 / Energy consumption management
 
-## 游戏特点
+2. **升级系统 / Level Up System**：
+   - 经验值累积 / Experience accumulation
+   - 等级提升 / Level progression
+   - 解锁新工作 / Unlock new jobs
 
-- **多种工作选择**：从简单的外卖配送员到程序员、设计师等高级职业
-- **技能树系统**：投资技能点提升你的专业技能和生活能力
-- **资源管理**：平衡体力和工作，做出最优的决策
+3. **技能系统 / Skill System**：
+   - 技能点分配 / Skill points allocation
+   - 能力提升 / Ability enhancement
+   - 特殊效果 / Special effects
 
-## 游戏玩法
+4. **休息系统 / Rest System**：
+   - 体力恢复 / Energy recovery
+   - 压力管理 / Stress management
+   - 健康维护 / Health maintenance
 
-1. **工作赚钱**：选择可用的工作完成，获得收入和经验
-2. **升级**：积累足够的经验后升级，获得技能点
-3. **提升技能**：花费技能点提升各种能力
-4. **休息恢复**：当体力不足时休息恢复
-5. **解锁新工作**：达到一定等级后解锁更高级的工作
+5. **成就系统 / Achievement System**：
+   - 里程碑奖励 / Milestone rewards
+   - 特殊称号 / Special titles
+   - 进度追踪 / Progress tracking
 
-## 如何开始
+6. **投资系统 / Investment System**：
+   - 股票投资 / Stock investment
+   - 基金理财 / Fund management
+   - 创业投资 / Startup investment
 
-直接在浏览器中打开 `index.html` 文件即可开始游戏。
+7. **社交系统 / Social System**：
+   - 人际关系 / Interpersonal relationships
+   - 团队管理 / Team management
+   - 社交活动 / Social activities
 
-## 技术栈
+## 如何开始 / How to Start
 
-- HTML5
-- CSS3
-- JavaScript (原生)
+1. **选择工作 / Choose a Job**：
+   - 从可用工作中选择 / Select from available jobs
+   - 查看工作要求 / Check job requirements
+   - 了解收益情况 / Understand benefits
 
-## 未来计划
+2. **管理资源 / Manage Resources**：
+   - 合理分配体力 / Allocate energy wisely
+   - 规划收入支出 / Plan income and expenses
+   - 平衡工作休息 / Balance work and rest
 
-- 添加更多工作类型
-- 引入随机事件系统
-- 增加成就系统
-- 实现游戏存档功能
+3. **提升技能 / Improve Skills**：
+   - 花费技能点提升各种能力 / Spend skill points to enhance abilities
+   - 参加培训课程 / Attend training courses
+   - 积累工作经验 / Accumulate work experience
 
-## 作者
+4. **发展规划 / Development Planning**：
+   - 制定职业目标 / Set career goals
+   - 投资理财 / Investment and financial management
+   - 建立人脉 / Build connections
 
-打工人游戏开发团队
+## 游戏提示 / Game Tips
 
-## 许可
+- 注意体力管理 / Pay attention to energy management
+- 合理分配时间 / Allocate time reasonably
+- 把握投资机会 / Seize investment opportunities
+- 保持健康状态 / Maintain health status
+- 培养社交关系 / Cultivate social relationships
 
-MIT 许可 
+## 更新日志 / Update Log
+
+### v1.0.0 (2024-01-01)
+- 游戏基础系统上线 / Basic game system launch
+- 实现核心玩法功能 / Implement core gameplay features
+- 添加基础职业选项 / Add basic career options
+
+### v1.1.0 (2024-01-15)
+- 新增投资系统 / Add investment system
+- 优化游戏界面 / Optimize game interface
+- 增加更多职业选择 / Add more career choices
+
+## 技术支持 / Technical Support
+
+如有问题或建议，请通过以下方式联系：
+For questions or suggestions, please contact through:
+
+- 邮箱 / Email: support@workinggame.com
+- 论坛 / Forum: forum.workinggame.com
+- QQ群 / QQ Group: 123456789
+
+## 许可证 / License
+
+本游戏采用 MIT 许可证
+This game is licensed under the MIT License 
