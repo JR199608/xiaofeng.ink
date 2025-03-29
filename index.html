@@ -1,144 +1,1092 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-X3J0HF3FGZ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-X3J0HF3FGZ');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>甲胎蛋白(AFP)检测分析工具</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/handsontable@latest/dist/handsontable.full.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            padding: 20px;
-        }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        .result-card {
-            margin-top: 20px;
-            display: none;
-        }
-        .diagnosis-input {
-            height: 100px;
-        }
-        #tableContainer {
-            margin-top: 20px;
-            overflow: auto;
-            max-height: 500px;
-        }
-        .file-upload {
-            margin-bottom: 20px;
-        }
-        .analysis-summary {
-            margin-top: 20px;
-        }
-    </style>
+    <title>打工人升级记 - Working People's Journey</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
-        <h1 class="text-center mb-4">甲胎蛋白(AFP)检测分析工具</h1>
-        
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="single-tab" data-bs-toggle="tab" data-bs-target="#single" type="button" role="tab">单例分析</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="batch-tab" data-bs-toggle="tab" data-bs-target="#batch" type="button" role="tab">批量分析</button>
-            </li>
-        </ul>
-
-        <div class="tab-content" id="myTabContent">
-            <!-- 单例分析面板 -->
-            <div class="tab-pane fade show active" id="single" role="tabpanel">
-                <div class="row mt-4">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="diagnosis" class="form-label">出院诊断：</label>
-                            <textarea class="form-control diagnosis-input" id="diagnosis" rows="3" placeholder="请输入诊断内容..."></textarea>
-                        </div>
-                        <button class="btn btn-primary" onclick="analyzeDiagnosis()">分析</button>
+    <header>
+        <h1>
+            <span>打工人升级记</span>
+            <span class="en">Working People's Journey</span>
+        </h1>
+        <div class="stats-bar">
+            <div class="stat bilingual">
+                <span id="coins">0</span> 元
+                <img src="assets/coin.svg" alt="金钱" class="icon">
+                <span class="en">Yuan</span>
+            </div>
+            <div class="stat bilingual">
+                <span id="energy">100</span>/100
+                <img src="assets/energy.svg" alt="体力" class="icon">
+                <span class="en">Energy</span>
+            </div>
+            <div class="stat bilingual">
+                <span id="skill-points">0</span>
+                <img src="assets/skill.svg" alt="技能点" class="icon">
+                <span class="en">Skill Points</span>
+            </div>
+            <button id="reset-game" class="btn reset-btn" onclick="resetGame()">
+                <span>重新打工</span>
+                <span class="en">Reset Game</span>
+            </button>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <!-- 左侧打工人信息 -->
+            <section class="character-section">
+                <div class="character-info">
+                    <div class="section-title">
+                        <h2>打工人</h2>
+                        <span class="en">Working People</span>
                     </div>
                     
-                    <div class="col-md-6">
-                        <div class="card result-card" id="resultCard">
-                            <div class="card-header">分析结果</div>
-                            <div class="card-body">
-                                <h5 class="card-title" id="resultTitle"></h5>
-                                <p class="card-text" id="resultReason"></p>
+                    <div class="bilingual">
+                        <span>等级</span>
+                        <span class="en">Level</span>
+                        <span id="level">1</span>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-row">
+                            <div class="stat-name">
+                                <span>经验值</span>
+                                <span class="en">Experience</span>
                             </div>
+                            <div class="progress-bar">
+                                <div id="exp-bar" class="progress" style="width: 0%"></div>
+                            </div>
+                            <span id="exp-text">0/100</span>
+                        </div>
+                        
+                        <div class="stat-row">
+                            <div class="stat-name">
+                                <span>体力</span>
+                                <span class="en">Energy</span>
+                            </div>
+                            <span class="stat-value" id="energy-value">100/100</span>
+                        </div>
+                        
+                        <div class="stat-row">
+                            <div class="stat-name">
+                                <span>金钱</span>
+                                <span class="en">Money</span>
+                            </div>
+                            <span class="stat-value" id="money-value">0元</span>
+                        </div>
+                        
+                        <div class="stat-row">
+                            <div class="stat-name">
+                                <span>技能点</span>
+                                <span class="en">Skill Points</span>
+                            </div>
+                            <span class="stat-value" id="skill-points-value">0</span>
+                        </div>
+                    </div>
+
+                    <!-- 技能等级显示 -->
+                    <div class="skills-overview">
+                        <div class="section-title">
+                            <h3>技能等级</h3>
+                            <span class="en">Skill Levels</span>
+                        </div>
+                        
+                        <div class="skill-row">
+                            <div class="skill-name">
+                                <span>编程</span>
+                                <span class="en">Programming</span>
+                            </div>
+                            <span id="programming-level">0/5</span>
+                        </div>
+                        
+                        <div class="skill-row">
+                            <div class="skill-name">
+                                <span>设计</span>
+                                <span class="en">Design</span>
+                            </div>
+                            <span id="design-level">0/5</span>
+                        </div>
+                        
+                        <div class="skill-row">
+                            <div class="skill-name">
+                                <span>体能</span>
+                                <span class="en">Stamina</span>
+                            </div>
+                            <span id="stamina-level">0/3</span>
+                        </div>
+                    </div>
+
+                    <!-- 状态监控 -->
+                    <div class="status-overview">
+                        <div class="section-title">
+                            <h3>状态监控</h3>
+                            <span class="en">Status Monitor</span>
+                        </div>
+                        
+                        <div class="status-row">
+                            <div class="status-name">
+                                <span>压力</span>
+                                <span class="en">Stress</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div id="stress-bar" class="progress" style="width: 0%"></div>
+                            </div>
+                            <span id="stress-value">0/100</span>
+                        </div>
+                        
+                        <div class="status-row">
+                            <div class="status-name">
+                                <span>幸福</span>
+                                <span class="en">Happiness</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div id="happiness-bar" class="progress" style="width: 100%"></div>
+                            </div>
+                            <span id="happiness-value">100/100</span>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- 批量分析面板 -->
-            <div class="tab-pane fade" id="batch" role="tabpanel">
-                <div class="mt-4">
-                    <div class="file-upload">
-                        <h5>上传Excel文件</h5>
-                        <div class="input-group">
-                            <input type="file" class="form-control" id="fileInput" accept=".xlsx,.xls,.csv">
-                            <button class="btn btn-primary" onclick="analyzeFile()">开始分析</button>
-                        </div>
-                        <small class="text-muted">支持的文件格式：Excel (.xlsx, .xls) 或 CSV (.csv)</small>
+                
+                <div class="growth-chart-section">
+                    <h3 class="bilingual">
+                        <span>成长曲线</span>
+                        <span class="en">Growth Chart</span>
+                    </h3>
+                    <div class="growth-chart">
+                        <canvas id="growthChart"></canvas>
                     </div>
-
-                    <div id="tableContainer"></div>
-
-                    <div class="analysis-summary card" style="display: none;">
-                        <div class="card-header">
-                            分析汇总
+                    <div class="growth-milestones bilingual">
+                        <div class="milestone">
+                            <span>打工人</span>
+                            <span class="en">Worker</span>
                         </div>
-                        <div class="card-body">
-                            <div id="summaryContent"></div>
-                            <div class="mt-3">
-                                <button class="btn btn-success" onclick="exportResults()">
-                                    <i class="bi bi-download"></i> 导出分析结果
+                        <div class="milestone">
+                            <span>小组长</span>
+                            <span class="en">Team Leader</span>
+                        </div>
+                        <div class="milestone">
+                            <span>部门经理</span>
+                            <span class="en">Department Manager</span>
+                        </div>
+                        <div class="milestone">
+                            <span>公司高管</span>
+                            <span class="en">Executive</span>
+                        </div>
+                        <div class="milestone">
+                            <span>企业总裁</span>
+                            <span class="en">CEO</span>
+                        </div>
+                        <div class="milestone">
+                            <span>全球首富</span>
+                            <span class="en">World's Richest</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 中间主要内容区域 -->
+            <div class="main-content">
+                <section class="jobs-section">
+                    <div class="section-title">
+                        <h2>可用工作</h2>
+                        <span class="en">Available Jobs</span>
+                    </div>
+                    
+                    <div class="jobs-container">
+                        <div class="job-card" id="job-delivery">
+                            <div class="job-image">
+                                <img src="assets/delivery.svg" alt="外卖配送员">
+                            </div>
+                            <h3>
+                                <span>外卖配送员</span>
+                                <span class="en">Food Delivery</span>
+                            </h3>
+                            <div class="job-description">
+                                <p>送外卖，披荆斩棘，赚取收入</p>
+                                <p class="en">Deliver food, overcome challenges, earn income</p>
+                            </div>
+                            
+                            <div class="job-effects">
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>体力消耗</span>
+                                        <span class="en">Energy Cost</span>
+                                    </div>
+                                    <span class="effect-value negative">-10</span>
+                                </div>
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>基础收入</span>
+                                        <span class="en">Base Income</span>
+                                    </div>
+                                    <span class="effect-value positive">+30元</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn work-btn" onclick="work('delivery')">
+                                <span>开始工作</span>
+                                <span class="en">Start Working</span>
+                            </button>
+                        </div>
+                        
+                        <div class="job-card" id="job-programmer">
+                            <div class="job-image">
+                                <img src="assets/programmer.svg" alt="程序员">
+                            </div>
+                            <h3>
+                                <span>程序员</span>
+                                <span class="en">Programmer</span>
+                            </h3>
+                            <div class="job-description">
+                                <p>编写代码，解决问题，创造价值</p>
+                                <p class="en">Write code, solve problems, create value</p>
+                            </div>
+                            
+                            <div class="job-effects">
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>体力消耗</span>
+                                        <span class="en">Energy Cost</span>
+                                    </div>
+                                    <span class="effect-value negative">-15</span>
+                                </div>
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>基础收入</span>
+                                        <span class="en">Base Income</span>
+                                    </div>
+                                    <span class="effect-value positive">+100元</span>
+                                </div>
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>经验获得</span>
+                                        <span class="en">Experience Gain</span>
+                                    </div>
+                                    <span class="effect-value positive">+40</span>
+                                </div>
+                            </div>
+                            
+                            <div class="requirement bilingual">
+                                <p>需要等级 5</p>
+                                <p class="en">Requires Level 5</p>
+                            </div>
+                            
+                            <button class="btn work-btn" disabled onclick="work('programmer')">
+                                <span>需要升级</span>
+                                <span class="en">Need Upgrade</span>
+                            </button>
+                        </div>
+                        
+                        <div class="job-card" id="job-designer">
+                            <div class="job-image">
+                                <img src="assets/designer.svg" alt="设计师">
+                            </div>
+                            <h3>
+                                <span>设计师</span>
+                                <span class="en">Designer</span>
+                            </h3>
+                            <div class="job-description">
+                                <p>创意设计，变化世界</p>
+                                <p class="en">Creative design, change the world</p>
+                            </div>
+                            
+                            <div class="job-effects">
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>体力消耗</span>
+                                        <span class="en">Energy Cost</span>
+                                    </div>
+                                    <span class="effect-value negative">-12</span>
+                                </div>
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>基础收入</span>
+                                        <span class="en">Base Income</span>
+                                    </div>
+                                    <span class="effect-value positive">+80元</span>
+                                </div>
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>经验获得</span>
+                                        <span class="en">Experience Gain</span>
+                                    </div>
+                                    <span class="effect-value positive">+35</span>
+                                </div>
+                            </div>
+                            
+                            <div class="requirement bilingual">
+                                <p>需要等级 8</p>
+                                <p class="en">Requires Level 8</p>
+                            </div>
+                            
+                            <button class="btn work-btn" disabled onclick="work('designer')">
+                                <span>需要升级</span>
+                                <span class="en">Need Upgrade</span>
+                            </button>
+                        </div>
+
+                        <div class="job-card" id="job-content-creator">
+                            <div class="job-image">
+                                <img src="assets/content-creator.svg" alt="自媒体创作者">
+                            </div>
+                            <h3>
+                                <span>自媒体创作者</span>
+                                <span class="en">Content Creator</span>
+                            </h3>
+                            <div class="job-description">
+                                <p>创作内容，吸引粉丝，实现价值</p>
+                                <p class="en">Create content, attract followers, realize value</p>
+                            </div>
+                            
+                            <div class="job-effects">
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>体力消耗</span>
+                                        <span class="en">Energy Cost</span>
+                                    </div>
+                                    <span class="effect-value negative">-13</span>
+                                </div>
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>基础收入</span>
+                                        <span class="en">Base Income</span>
+                                    </div>
+                                    <span class="effect-value positive">+90元</span>
+                                </div>
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>经验获得</span>
+                                        <span class="en">Experience Gain</span>
+                                    </div>
+                                    <span class="effect-value positive">+38</span>
+                                </div>
+                            </div>
+                            
+                            <div class="requirement bilingual">
+                                <p>需要等级 6</p>
+                                <p class="en">Requires Level 6</p>
+                            </div>
+                            
+                            <button class="btn work-btn" disabled onclick="work('content_creator')">
+                                <span>需要升级</span>
+                                <span class="en">Need Upgrade</span>
+                            </button>
+                        </div>
+
+                        <div class="job-card" id="job-ecommerce">
+                            <div class="job-image">
+                                <img src="assets/ecommerce.svg" alt="电商运营">
+                            </div>
+                            <h3>
+                                <span>电商运营</span>
+                                <span class="en">E-commerce Operator</span>
+                            </h3>
+                            <div class="job-description">
+                                <p>运营店铺，提升销量</p>
+                                <p class="en">Operate stores, increase sales</p>
+                            </div>
+                            
+                            <div class="job-effects">
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>体力消耗</span>
+                                        <span class="en">Energy Cost</span>
+                                    </div>
+                                    <span class="effect-value negative">-14</span>
+                                </div>
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>基础收入</span>
+                                        <span class="en">Base Income</span>
+                                    </div>
+                                    <span class="effect-value positive">+110元</span>
+                                </div>
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>经验获得</span>
+                                        <span class="en">Experience Gain</span>
+                                    </div>
+                                    <span class="effect-value positive">+42</span>
+                                </div>
+                            </div>
+                            
+                            <div class="requirement bilingual">
+                                <p>需要等级 7</p>
+                                <p class="en">Requires Level 7</p>
+                            </div>
+                            
+                            <button class="btn work-btn" disabled onclick="work('ecommerce')">
+                                <span>需要升级</span>
+                                <span class="en">Need Upgrade</span>
+                            </button>
+                        </div>
+
+                        <div class="job-card" id="job-entrepreneur">
+                            <div class="job-image">
+                                <img src="assets/entrepreneur.svg" alt="创业者">
+                            </div>
+                            <h3>
+                                <span>创业者</span>
+                                <span class="en">Entrepreneur</span>
+                            </h3>
+                            <div class="job-description">
+                                <p>开创事业，实现梦想</p>
+                                <p class="en">Start a business, achieve dreams</p>
+                            </div>
+                            
+                            <div class="job-effects">
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>体力消耗</span>
+                                        <span class="en">Energy Cost</span>
+                                    </div>
+                                    <span class="effect-value negative">-20</span>
+                                </div>
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>基础收入</span>
+                                        <span class="en">Base Income</span>
+                                    </div>
+                                    <span class="effect-value positive">+150元</span>
+                                </div>
+                                <div class="effect">
+                                    <div class="effect-name bilingual">
+                                        <span>经验获得</span>
+                                        <span class="en">Experience Gain</span>
+                                    </div>
+                                    <span class="effect-value positive">+50</span>
+                                </div>
+                            </div>
+                            
+                            <div class="requirement bilingual">
+                                <p>需要等级 10 和管理能力 3级</p>
+                                <p class="en">Requires Level 10 and Management Level 3</p>
+                            </div>
+                            
+                            <button class="btn work-btn" disabled onclick="work('entrepreneur')">
+                                <span>需要升级</span>
+                                <span class="en">Need Upgrade</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="skills-section">
+                    <div class="section-title">
+                        <h2>技能树</h2>
+                        <span class="en">Skill Tree</span>
+                    </div>
+                    
+                    <div class="skills-container">
+                        <div class="skill-category">
+                            <div class="section-title">
+                                <h3>基础编程</h3>
+                                <span class="en">Basic Programming</span>
+                            </div>
+                            <div class="skill-description">
+                                <p>学习基本的编程知识</p>
+                                <p class="en">Learn basic programming knowledge</p>
+                            </div>
+                            
+                            <div class="skill-info">
+                                <div class="skill-level bilingual">
+                                    <span>等级</span>
+                                    <span class="en">Level</span>
+                                    <span id="programming-level">0/5</span>
+                                </div>
+                                <div class="skill-effect bilingual">
+                                    <span>效果</span>
+                                    <span class="en">Effect</span>
+                                    <span>收入 <span class="positive">+10%</span></span>
+                                    <span class="en">Income <span class="positive">+10%</span></span>
+                                </div>
+                                <div class="skill-cost bilingual">
+                                    <span>升级消耗</span>
+                                    <span class="en">Upgrade Cost</span>
+                                    <span>1 技能点</span>
+                                    <span class="en">1 Skill Point</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn skill-btn" disabled onclick="upgradeSkill('programming')">
+                                <span>技能点不足</span>
+                                <span class="en">Not Enough Points</span>
+                            </button>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="section-title">
+                                <h3>基础设计</h3>
+                                <span class="en">Basic Design</span>
+                            </div>
+                            <div class="skill-description">
+                                <p>学习基本的设计理论</p>
+                                <p class="en">Learn basic design theory</p>
+                            </div>
+                            
+                            <div class="skill-info">
+                                <div class="skill-level bilingual">
+                                    <span>等级</span>
+                                    <span class="en">Level</span>
+                                    <span id="design-level">0/5</span>
+                                </div>
+                                <div class="skill-effect bilingual">
+                                    <span>效果</span>
+                                    <span class="en">Effect</span>
+                                    <span>收入 <span class="positive">+10%</span></span>
+                                    <span class="en">Income <span class="positive">+10%</span></span>
+                                </div>
+                                <div class="skill-cost bilingual">
+                                    <span>升级消耗</span>
+                                    <span class="en">Upgrade Cost</span>
+                                    <span>1 技能点</span>
+                                    <span class="en">1 Skill Point</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn skill-btn" disabled onclick="upgradeSkill('design')">
+                                <span>技能点不足</span>
+                                <span class="en">Not Enough Points</span>
+                            </button>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="section-title">
+                                <h3>体能管理</h3>
+                                <span class="en">Stamina Management</span>
+                            </div>
+                            <div class="skill-description">
+                                <p>提高体力恢复速度</p>
+                                <p class="en">Increase energy recovery rate</p>
+                            </div>
+                            
+                            <div class="skill-info">
+                                <div class="skill-level bilingual">
+                                    <span>等级</span>
+                                    <span class="en">Level</span>
+                                    <span id="stamina-level">0/3</span>
+                                </div>
+                                <div class="skill-effect bilingual">
+                                    <span>效果</span>
+                                    <span class="en">Effect</span>
+                                    <span>体力恢复 <span class="positive">+20%</span></span>
+                                    <span class="en">Energy Recovery <span class="positive">+20%</span></span>
+                                </div>
+                                <div class="skill-cost bilingual">
+                                    <span>升级消耗</span>
+                                    <span class="en">Upgrade Cost</span>
+                                    <span>2 技能点</span>
+                                    <span class="en">2 Skill Points</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn skill-btn" disabled onclick="upgradeSkill('stamina')">
+                                <span>技能点不足</span>
+                                <span class="en">Not Enough Points</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="shop-section">
+                    <div class="section-title">
+                        <h2>商店</h2>
+                        <span class="en">Shop</span>
+                    </div>
+                    <div class="shop-container">
+                        <div class="shop-item">
+                            <div class="item-image">
+                                <img src="assets/coffee.svg" alt="咖啡">
+                            </div>
+                            <h3 class="bilingual">
+                                <span>咖啡</span>
+                                <span class="en">Coffee</span>
+                            </h3>
+                            <div class="item-description">
+                                <p>提神醒脑，立即恢复30点体力</p>
+                                <p class="en">Stay alert, instantly recover 30 energy points</p>
+                            </div>
+                            <div class="item-price bilingual">
+                                <span>20元</span>
+                                <span class="en">20 Yuan</span>
+                            </div>
+                            <button class="btn shop-btn" onclick="buyItem('coffee')">
+                                <span>购买</span>
+                                <span class="en">Buy</span>
+                            </button>
+                        </div>
+                        
+                        <div class="shop-item">
+                            <div class="item-image">
+                                <img src="assets/book.svg" alt="技能书">
+                            </div>
+                            <h3 class="bilingual">
+                                <span>技能书</span>
+                                <span class="en">Skill Book</span>
+                            </h3>
+                            <div class="item-description">
+                                <p>获得1个技能点</p>
+                                <p class="en">Gain 1 skill point</p>
+                            </div>
+                            <div class="item-price bilingual">
+                                <span>100元</span>
+                                <span class="en">100 Yuan</span>
+                            </div>
+                            <button class="btn shop-btn" onclick="buyItem('skillbook')">
+                                <span>购买</span>
+                                <span class="en">Buy</span>
+                            </button>
+                        </div>
+                        
+                        <div class="shop-item">
+                            <div class="item-image">
+                                <img src="assets/laptop.svg" alt="笔记本电脑">
+                            </div>
+                            <h3 class="bilingual">
+                                <span>笔记本电脑</span>
+                                <span class="en">Laptop</span>
+                            </h3>
+                            <div class="item-description">
+                                <p>提高10%工作收入</p>
+                                <p class="en">Increase work income by 10%</p>
+                            </div>
+                            <div class="item-price bilingual">
+                                <span>500元</span>
+                                <span class="en">500 Yuan</span>
+                            </div>
+                            <button class="btn shop-btn" onclick="buyItem('laptop')">
+                                <span>购买</span>
+                                <span class="en">Buy</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="events-section">
+                    <div class="section-title">
+                        <h2>最新动态</h2>
+                        <span class="en">Latest Events</span>
+                    </div>
+                    <div class="events-container">
+                        <div id="current-event" class="event-card hidden">
+                            <h3 class="event-title"></h3>
+                            <p class="event-description"></p>
+                            <div class="event-choices">
+                                <!-- 动态生成选项 -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="achievements-section">
+                    <div class="section-title">
+                        <h2>成就</h2>
+                        <span class="en">Achievements</span>
+                    </div>
+                    <div class="achievements-container">
+                        <div class="achievement" id="achievement-first-job">
+                            <div class="achievement-icon">🌟</div>
+                            <div class="achievement-info bilingual">
+                                <h3>
+                                    <span>初入职场</span>
+                                    <span class="en">First Job</span>
+                                </h3>
+                                <p>完成第一份工作</p>
+                                <p class="en">Complete your first job</p>
+                            </div>
+                            <div class="achievement-status bilingual">
+                                <span>未达成</span>
+                                <span class="en">Not Achieved</span>
+                            </div>
+                        </div>
+                        <div class="achievement" id="achievement-rich">
+                            <div class="achievement-icon">💰</div>
+                            <div class="achievement-info bilingual">
+                                <h3>
+                                    <span>小康生活</span>
+                                    <span class="en">Comfortable Life</span>
+                                </h3>
+                                <p>累计赚取1000元</p>
+                                <p class="en">Earn a total of 1000 Yuan</p>
+                            </div>
+                            <div class="achievement-status bilingual">
+                                <span>未达成</span>
+                                <span class="en">Not Achieved</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 新增：投资系统 -->
+                <section class="investment-section">
+                    <div class="section-title">
+                        <h2>投资理财</h2>
+                        <span class="en">Investment</span>
+                    </div>
+                    <div class="investment-container">
+                        <div class="investment-card">
+                            <div class="section-title">
+                                <h3>股票投资</h3>
+                                <span class="en">Stock Investment</span>
+                            </div>
+                            <div class="investment-description">
+                                <p>短期高风险高收益</p>
+                                <p class="en">Short-term high-risk high-return</p>
+                            </div>
+                            <div class="investment-input">
+                                <input type="number" id="stocks-amount" min="100" step="100" placeholder="投资金额 / Investment Amount">
+                                <button class="btn invest-btn" onclick="invest('stocks')">
+                                    <span>投资</span>
+                                    <span class="en">Invest</span>
                                 </button>
                             </div>
+                            <p class="investment-info bilingual">
+                                <span>当前投资：</span>
+                                <span class="en">Current Investment: </span>
+                                <span id="current-stocks">0</span>
+                                <span>元</span>
+                                <span class="en">Yuan</span>
+                            </p>
+                        </div>
+
+                        <div class="investment-card">
+                            <div class="section-title">
+                                <h3>基金理财</h3>
+                                <span class="en">Fund Investment</span>
+                            </div>
+                            <div class="investment-description">
+                                <p>稳定收益，定期分红</p>
+                                <p class="en">Stable returns, regular dividends</p>
+                            </div>
+                            <div class="investment-input">
+                                <input type="number" id="funds-amount" min="100" step="100" placeholder="投资金额 / Investment Amount">
+                                <button class="btn invest-btn" onclick="invest('funds')">
+                                    <span>投资</span>
+                                    <span class="en">Invest</span>
+                                </button>
+                            </div>
+                            <p class="investment-info bilingual">
+                                <span>当前投资：</span>
+                                <span class="en">Current Investment: </span>
+                                <span id="current-funds">0</span>
+                                <span>元</span>
+                                <span class="en">Yuan</span>
+                            </p>
+                        </div>
+
+                        <div class="investment-card">
+                            <div class="section-title">
+                                <h3>创业投资</h3>
+                                <span class="en">Startup Investment</span>
+                            </div>
+                            <div class="investment-description">
+                                <p>高风险高收益</p>
+                                <p class="en">High-risk high-return</p>
+                            </div>
+                            <div class="investment-input">
+                                <input type="number" id="startups-amount" min="500" step="100" placeholder="投资金额 / Investment Amount">
+                                <button class="btn invest-btn" onclick="invest('startups')">
+                                    <span>投资</span>
+                                    <span class="en">Invest</span>
+                                </button>
+                            </div>
+                            <p class="investment-info bilingual">
+                                <span>当前投资：</span>
+                                <span class="en">Current Investment: </span>
+                                <span id="current-startups">0</span>
+                                <span>元</span>
+                                <span class="en">Yuan</span>
+                            </p>
                         </div>
                     </div>
-                </div>
+                </section>
+
+                <!-- 新增：社交系统 -->
+                <section class="social-section">
+                    <div class="section-title">
+                        <h2>社交活动</h2>
+                        <span class="en">Social Activities</span>
+                    </div>
+                    <div class="social-container">
+                        <div class="social-card">
+                            <div class="section-title">
+                                <h3>人脉拓展</h3>
+                                <span class="en">Networking</span>
+                            </div>
+                            <div class="social-description">
+                                <p>结识新的人脉，获取机会</p>
+                                <p class="en">Meet new connections, gain opportunities</p>
+                            </div>
+                            <button class="btn social-btn" onclick="socialInteract('networking')">
+                                <span>社交</span>
+                                <span class="en">Socialize</span>
+                            </button>
+                            <p class="social-info bilingual">
+                                <span>当前人脉：</span>
+                                <span class="en">Current Connections: </span>
+                                <span id="connections-count">0</span>
+                            </p>
+                        </div>
+
+                        <div class="social-card">
+                            <div class="section-title">
+                                <h3>团队建设</h3>
+                                <span class="en">Team Building</span>
+                            </div>
+                            <div class="social-description">
+                                <p>发展团队关系，提升效率</p>
+                                <p class="en">Develop team relationships, improve efficiency</p>
+                            </div>
+                            <button class="btn social-btn" onclick="socialInteract('team_building')">
+                                <span>互动</span>
+                                <span class="en">Interact</span>
+                            </button>
+                            <div class="colleagues-list" id="colleagues-list">
+                                <!-- 动态生成同事列表 -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 新增：个人发展系统 -->
+                <section class="development-section">
+                    <div class="section-title">
+                        <h2>个人发展</h2>
+                        <span class="en">Personal Development</span>
+                    </div>
+                    <div class="development-container">
+                        <div class="study-card">
+                            <div class="section-title">
+                                <h3>学习中心</h3>
+                                <span class="en">Learning Center</span>
+                            </div>
+                            <div class="course-list">
+                                <div class="course">
+                                    <div class="course-title">
+                                        <h4>编程进阶</h4>
+                                        <span class="en">Advanced Programming</span>
+                                    </div>
+                                    <div class="course-description">
+                                        <p>提升编程技能</p>
+                                        <p class="en">Improve programming skills</p>
+                                    </div>
+                                    <button class="btn study-btn" onclick="study('programming_course')">
+                                        <span>开始学习</span>
+                                        <span class="en">Start Learning</span>
+                                    </button>
+                                </div>
+                                <div class="course">
+                                    <div class="course-title">
+                                        <h4>管理知识</h4>
+                                        <span class="en">Management Knowledge</span>
+                                    </div>
+                                    <div class="course-description">
+                                        <p>学习管理技巧</p>
+                                        <p class="en">Learn management skills</p>
+                                    </div>
+                                    <button class="btn study-btn" onclick="study('management_course')">
+                                        <span>开始学习</span>
+                                        <span class="en">Start Learning</span>
+                                    </button>
+                                </div>
+                                <div class="course">
+                                    <div class="course-title">
+                                        <h4>投资理财</h4>
+                                        <span class="en">Investment Knowledge</span>
+                                    </div>
+                                    <div class="course-description">
+                                        <p>掌握投资技巧</p>
+                                        <p class="en">Master investment skills</p>
+                                    </div>
+                                    <button class="btn study-btn" onclick="study('investment_course')">
+                                        <span>开始学习</span>
+                                        <span class="en">Start Learning</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="certificates-card">
+                            <div class="section-title">
+                                <h3>我的证书</h3>
+                                <span class="en">My Certificates</span>
+                            </div>
+                            <div class="certificates-list" id="certificates-list">
+                                <!-- 动态生成证书列表 -->
+                            </div>
+                        </div>
+
+                        <div class="projects-card">
+                            <div class="section-title">
+                                <h3>项目经历</h3>
+                                <span class="en">Project Experience</span>
+                            </div>
+                            <div class="projects-list" id="projects-list">
+                                <!-- 动态生成项目列表 -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 新增：休闲活动 -->
+                <section class="leisure-section">
+                    <h2>休闲活动</h2>
+                    <div class="leisure-container">
+                        <div class="leisure-card">
+                            <h3>度假放松</h3>
+                            <p>彻底放松，恢复精力</p>
+                            <div class="leisure-effects">
+                                <div class="effect">
+                                    <span class="effect-name">压力减少</span>
+                                    <span class="effect-value positive">-30</span>
+                                </div>
+                                <div class="effect">
+                                    <span class="effect-name">幸福感提升</span>
+                                    <span class="effect-value positive">+20</span>
+                                </div>
+                            </div>
+                            <button class="btn leisure-btn" onclick="relax('vacation')">去度假</button>
+                        </div>
+
+                        <div class="leisure-card">
+                            <h3>兴趣培养</h3>
+                            <p>发展兴趣爱好</p>
+                            <div class="leisure-effects">
+                                <div class="effect">
+                                    <span class="effect-name">压力减少</span>
+                                    <span class="effect-value positive">-15</span>
+                                </div>
+                                <div class="effect">
+                                    <span class="effect-name">创造力提升</span>
+                                    <span class="effect-value positive">+0.1</span>
+                                </div>
+                            </div>
+                            <button class="btn leisure-btn" onclick="relax('hobby')">培养兴趣</button>
+                        </div>
+
+                        <div class="leisure-card">
+                            <h3>社交聚会</h3>
+                            <p>参加社交活动</p>
+                            <div class="leisure-effects">
+                                <div class="effect">
+                                    <span class="effect-name">压力减少</span>
+                                    <span class="effect-value positive">-10</span>
+                                </div>
+                                <div class="effect">
+                                    <span class="effect-name">社交能力</span>
+                                    <span class="effect-value positive">+0.1</span>
+                                </div>
+                            </div>
+                            <button class="btn leisure-btn" onclick="relax('social')">去社交</button>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </div>
 
-        <div class="mt-5">
-            <h4>使用说明：</h4>
-            <ol>
-                <li>单例分析：直接输入诊断内容进行分析</li>
-                <li>批量分析：上传Excel文件（需包含"序号"和"出院诊断"列）</li>
-                <li>系统将自动分析是否需要进行甲胎蛋白检测</li>
-                <li>分析结果将显示是否合理及具体理由</li>
-            </ol>
-        </div>
+            <!-- 右侧休息活动 -->
+            <section class="rest-section">
+                <div class="section-title">
+                    <h2>休息活动</h2>
+                    <span class="en">Rest Activities</span>
+                </div>
+                
+                <div class="activity" id="short-rest">
+                    <h4>
+                        <span>小憩一会</span>
+                        <span class="en">Take a Break</span>
+                    </h4>
+                    <div class="activity-description">
+                        <p>休息一下，你会恢复体力</p>
+                        <p class="en">Take a break, you'll recover energy</p>
+                    </div>
+                    <div class="effect">
+                        <div class="effect-name bilingual">
+                            <span>恢复体力</span>
+                            <span class="en">Energy Recovery</span>
+                        </div>
+                        <span class="positive">+20</span>
+                    </div>
+                    <button class="btn rest-btn" onclick="rest('short')">
+                        <span>休息一下</span>
+                        <span class="en">Take a Break</span>
+                    </button>
+                </div>
 
-        <div class="mt-4">
-            <h4>注意事项：</h4>
-            <ul>
-                <li>本工具仅供参考，具体检查项目请遵医嘱</li>
-                <li>如有疑问请咨询主管医师</li>
-                <li>定期检测对疾病监测很重要</li>
-            </ul>
-        </div>
-    </div>
+                <div class="activity" id="meditation">
+                    <h4>
+                        <span>冥想放松</span>
+                        <span class="en">Meditation</span>
+                    </h4>
+                    <div class="activity-description">
+                        <p>静心冥想，缓解压力</p>
+                        <p class="en">Meditate quietly, relieve stress</p>
+                    </div>
+                    <div class="effect">
+                        <div class="effect-name bilingual">
+                            <span>压力减少</span>
+                            <span class="en">Stress Reduction</span>
+                        </div>
+                        <span class="positive">-10</span>
+                        <div class="effect-name bilingual">
+                            <span>恢复体力</span>
+                            <span class="en">Energy Recovery</span>
+                        </div>
+                        <span class="positive">+10</span>
+                    </div>
+                    <button class="btn rest-btn" onclick="rest('meditation')">
+                        <span>开始冥想</span>
+                        <span class="en">Start Meditation</span>
+                    </button>
+                </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/handsontable@latest/dist/handsontable.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@latest/dist/xlsx.full.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <script src="script.js"></script>
+                <div class="activity" id="power-nap">
+                    <h4>能量小睡</h4>
+                    <p>短暂睡眠，快速恢复</p>
+                    <p class="effect">
+                        <span>恢复体力 <span class="positive">+35</span></span>
+                        <span>压力减少 <span class="positive">-5</span></span>
+                    </p>
+                    <button class="btn rest-btn" onclick="rest('power-nap')">小睡一会</button>
+                </div>
+
+                <!-- 添加休闲活动 -->
+                <h3>休闲活动</h3>
+                <div class="activity" id="vacation">
+                    <h4>度假放松</h4>
+                    <p>彻底放松，恢复精力</p>
+                    <p class="effect">
+                        <span>压力减少 <span class="positive">-30</span></span>
+                        <span>幸福感提升 <span class="positive">+20</span></span>
+                    </p>
+                    <button class="btn leisure-btn" onclick="relax('vacation')">去度假</button>
+                </div>
+
+                <div class="activity" id="hobby">
+                    <h4>兴趣培养</h4>
+                    <p>发展兴趣爱好</p>
+                    <p class="effect">
+                        <span>压力减少 <span class="positive">-15</span></span>
+                        <span>创造力提升 <span class="positive">+0.1</span></span>
+                    </p>
+                    <button class="btn leisure-btn" onclick="relax('hobby')">培养兴趣</button>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <footer>
+        <p class="bilingual">
+            <span>Copyright © 2025 打工人升级记</span>
+            <span class="en">Copyright © 2025 Working People's Journey</span>
+        </p>
+    </footer>
+    
+    <div id="notification" class="notification"></div>
+    
+    <script src="js/game.js"></script>
 </body>
 </html> 

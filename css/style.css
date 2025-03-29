@@ -1,0 +1,1359 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    gap: 20px;
+    min-height: calc(100vh - 150px);
+}
+
+/* 标题和状态栏 */
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* 左侧打工人信息 */
+.character-section {
+    position: sticky;
+    top: 20px;
+    height: calc(100vh - 100px);
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.character-info h2 {
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.stats {
+    margin-bottom: 20px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.stat-name {
+    font-weight: bold;
+}
+
+.progress-bar {
+    height: 20px;
+    width: 60%;
+    background-color: #ecf0f1;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background-color: #3498db;
+    transition: width 0.3s ease;
+}
+
+/* 右侧休息活动 */
+.rest-section {
+    position: sticky;
+    top: 20px;
+    height: calc(100vh - 100px);
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.activity {
+    background-color: #f8f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: transform 0.2s ease;
+}
+
+.activity:hover {
+    transform: translateY(-2px);
+}
+
+.activity h4 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.activity .effect {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 10px 0;
+    font-size: 0.9em;
+}
+
+/* 工作区域 */
+.jobs-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.jobs-section h2 {
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.jobs-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.job-card {
+    border: 1px solid #ecf0f1;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.job-image {
+    height: 150px;
+    overflow: hidden;
+}
+
+.job-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.job-card h3 {
+    padding: 15px;
+    text-align: center;
+    background-color: #f8f9fa;
+    margin: 0;
+}
+
+.job-card p {
+    padding: 0 15px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.job-effects {
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.effect {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.effect-name {
+    font-weight: bold;
+}
+
+.requirement {
+    padding: 10px 15px;
+    text-align: center;
+    background-color: #f8f9fa;
+    font-style: italic;
+    color: #7f8c8d;
+}
+
+/* 技能区域 */
+.skills-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.skills-section h2 {
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.skills-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.skill-category {
+    border: 1px solid #ecf0f1;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.skill-category h3 {
+    margin-bottom: 5px;
+    color: #2980b9;
+}
+
+.skill-category p {
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    color: #7f8c8d;
+}
+
+.skill-info {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.skill-level, .skill-effect, .skill-cost {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+/* 按钮样式 */
+.btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.btn:active::after {
+    animation: ripple 0.4s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.work-btn {
+    background-color: #3498db;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.work-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.work-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.work-btn:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+.rest-btn {
+    background-color: #2ecc71;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.rest-btn:hover {
+    transform: translateX(5px);
+}
+
+.rest-btn:active {
+    transform: translateX(0) scale(0.95);
+}
+
+.rest-btn:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+.skill-btn {
+    background-color: #9b59b6;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.skill-btn:hover:not(:disabled) {
+    transform: rotate(-2deg);
+}
+
+.skill-btn:active:not(:disabled) {
+    transform: rotate(0deg) scale(0.95);
+}
+
+.skill-btn:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+/* 通用样式 */
+.positive {
+    color: #2ecc71;
+}
+
+.negative {
+    color: #e74c3c;
+}
+
+/* 页脚 */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #2c3e50;
+    color: white;
+    margin-top: 30px;
+}
+
+/* 通知 */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px;
+    background-color: #2ecc71;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    z-index: 1000;
+    animation: notificationSlide 3s ease-in-out;
+}
+
+.notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* 商店部分样式 */
+.shop-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.shop-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.shop-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.shop-item:hover {
+    transform: translateY(-5px);
+}
+
+.item-image {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 15px;
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.item-price {
+    font-size: 1.2em;
+    color: #28a745;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.shop-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.shop-btn:hover {
+    transform: scale(1.05);
+}
+
+.shop-btn:active {
+    transform: scale(0.95);
+}
+
+/* 事件部分样式 */
+.events-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.event-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+.event-card.hidden {
+    display: none;
+}
+
+.event-title {
+    color: #343a40;
+    margin-bottom: 10px;
+}
+
+.event-description {
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.event-choices {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.event-choice {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.event-choice:hover {
+    background: #0056b3;
+}
+
+/* 成就部分样式 */
+.achievements-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.achievements-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.achievement {
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    gap: 15px;
+}
+
+.achievement-icon {
+    font-size: 2em;
+}
+
+.achievement-info {
+    flex-grow: 1;
+}
+
+.achievement-info h3 {
+    margin: 0;
+    color: #343a40;
+}
+
+.achievement-info p {
+    margin: 5px 0 0;
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.achievement-status {
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.achievement.achieved {
+    background: #e8f5e9;
+}
+
+.achievement.achieved .achievement-status {
+    color: #28a745;
+}
+
+/* 投资系统样式 */
+.investment-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.investment-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.investment-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.investment-card:hover {
+    transform: translateY(-5px);
+}
+
+.investment-input {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.investment-input input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.invest-btn {
+    background-color: #e67e22;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.invest-btn:hover {
+    transform: skew(-5deg);
+}
+
+.invest-btn:active {
+    transform: skew(0deg) scale(0.95);
+}
+
+.investment-info {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* 社交系统样式 */
+.social-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.social-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.social-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+.social-btn {
+    background-color: #9b59b6;
+    color: white;
+    margin: 15px 0;
+    transition: all 0.3s ease;
+}
+
+.social-btn:hover {
+    transform: rotate(2deg) scale(1.05);
+}
+
+.social-btn:active {
+    transform: rotate(0deg) scale(0.95);
+}
+
+.social-info {
+    margin-top: 10px;
+    color: #2c3e50;
+}
+
+.colleagues-list {
+    margin-top: 15px;
+    text-align: left;
+}
+
+.colleague-item {
+    background: white;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.colleague-name {
+    font-weight: bold;
+}
+
+.colleague-buff {
+    color: #27ae60;
+    font-size: 0.9em;
+}
+
+/* 个人发展系统样式 */
+.development-section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.development-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.study-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.course-list {
+    display: grid;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.course {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.course h4 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.study-btn {
+    background-color: #3498db;
+    color: white;
+    margin-top: 10px;
+}
+
+.study-btn:hover {
+    background-color: #2980b9;
+}
+
+.certificates-card, .projects-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.certificates-list, .projects-list {
+    margin-top: 15px;
+}
+
+/* 休闲活动样式 */
+.leisure-section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.leisure-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.leisure-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.leisure-card:hover {
+    transform: translateY(-5px);
+}
+
+.leisure-effects {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.leisure-btn {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.leisure-btn:hover {
+    background-color: #27ae60;
+}
+
+/* 状态监控样式 */
+.status-section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.status-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.status-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+.status-card h3 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.status-card .progress-bar {
+    height: 20px;
+    background: #ecf0f1;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+#stress-bar {
+    background-color: #e74c3c;
+}
+
+#happiness-bar {
+    background-color: #2ecc71;
+}
+
+#morale-bar {
+    background-color: #3498db;
+}
+
+/* 中间主要内容区域 */
+.main-content {
+    background-color: transparent;
+    min-height: 100%;
+}
+
+/* 技能概览样式 */
+.skills-overview {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ecf0f1;
+}
+
+.skill-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 5px 0;
+}
+
+.skill-name {
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+/* 状态概览样式 */
+.status-overview {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ecf0f1;
+}
+
+.status-row {
+    margin-bottom: 15px;
+}
+
+.status-name {
+    display: block;
+    margin-bottom: 5px;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+/* 滚动条样式 */
+.character-section::-webkit-scrollbar,
+.rest-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.character-section::-webkit-scrollbar-track,
+.rest-section::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.character-section::-webkit-scrollbar-thumb,
+.rest-section::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.character-section::-webkit-scrollbar-thumb:hover,
+.rest-section::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* 双语显示样式 */
+.bilingual {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.bilingual .en {
+    font-size: 0.85em;
+    color: #666;
+    font-style: italic;
+}
+
+.section-title {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.section-title .en {
+    font-size: 0.9em;
+    color: #666;
+    font-weight: normal;
+    margin-top: 2px;
+}
+
+.job-card h3,
+.activity h4 {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.job-description,
+.activity-description {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 8px 0;
+}
+
+.stat-name,
+.skill-name,
+.status-name {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* 成就解锁动画 */
+@keyframes achievementUnlock {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.achievement.unlocked {
+    animation: achievementUnlock 0.5s ease-out;
+}
+
+/* 等级提升动画 */
+@keyframes levelUp {
+    0% {
+        transform: scale(1);
+        filter: brightness(100%);
+    }
+    50% {
+        transform: scale(1.2);
+        filter: brightness(150%);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(100%);
+    }
+}
+
+.level-up {
+    animation: levelUp 0.8s ease-out;
+}
+
+/* 通知弹出动画 */
+@keyframes notificationSlide {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    10% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    90% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+}
+
+.skill-point-gain {
+    animation: skillPointGain 0.6s ease-out;
+}
+
+/* 金钱数值变化动画 */
+@keyframes moneyChange {
+    0% {
+        transform: scale(1);
+        color: inherit;
+    }
+    50% {
+        transform: scale(1.2);
+        color: #4CAF50;
+    }
+    100% {
+        transform: scale(1);
+        color: inherit;
+    }
+}
+
+.money-change {
+    animation: moneyChange 0.5s ease-out;
+}
+
+/* 成长曲线图样式 */
+.growth-chart-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ecf0f1;
+}
+
+.growth-chart-section h3 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.growth-chart {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    height: 200px;
+    position: relative;
+}
+
+.growth-milestones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.milestone {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.milestone:hover {
+    transform: translateX(5px);
+    background: #e8f5e9;
+}
+
+.milestone.achieved {
+    background: #e8f5e9;
+    border-left: 4px solid #4CAF50;
+}
+
+.milestone .en {
+    font-size: 0.8em;
+    color: #666;
+    font-style: italic;
+}
+
+/* 成长曲线图动画 */
+@keyframes chartGrow {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.growth-chart canvas {
+    transform-origin: left;
+    animation: chartGrow 1.5s ease-out;
+}
+
+/* 升级庆祝特效 */
+.level-up-celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.8);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.celebration-content {
+    position: relative;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+    animation: celebrationPop 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.celebration-rays {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    transform: translate(-50%, -50%);
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(255, 215, 0, 0.2) 20deg,
+        transparent 40deg
+    );
+    animation: rayRotate 4s linear infinite;
+}
+
+.level-up-emoji {
+    font-size: 64px;
+    margin-bottom: 20px;
+    animation: emojiPop 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) 0.3s backwards;
+}
+
+.level-up-congrats {
+    font-size: 32px;
+    font-weight: bold;
+    color: #e74c3c;
+    margin: 10px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    animation: textSlideIn 0.5s ease-out 0.5s backwards;
+}
+
+.level-up-en {
+    font-size: 24px;
+    color: #7f8c8d;
+    font-style: italic;
+    animation: textSlideIn 0.5s ease-out 0.7s backwards;
+}
+
+.level-number {
+    margin: 20px 0;
+    animation: numberPop 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) 0.9s backwards;
+}
+
+.level-label {
+    font-size: 24px;
+    color: #95a5a6;
+    margin-bottom: 5px;
+}
+
+.level-value {
+    font-size: 72px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #f1c40f, #e67e22);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: particleFly 1.5s ease-out forwards;
+}
+
+.particle-shape {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    animation: particleFlyRotate 1.5s ease-out forwards;
+}
+
+.star {
+    position: absolute;
+    background: radial-gradient(circle at 30% 30%, #fff, #ffd700);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    animation: starTwinkle var(--twinkle-duration) ease-in-out infinite;
+}
+
+.celebration-achievement {
+    margin-top: 20px;
+    animation: achievementSlideUp 0.5s ease-out 1.1s backwards;
+}
+
+.achievement-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+    animation: achievementSpin 1s ease-out;
+}
+
+.achievement-text {
+    font-size: 20px;
+    color: #e67e22;
+    font-weight: bold;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes celebrationPop {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes rayRotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes emojiPop {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes textSlideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes numberPop {
+    0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+@keyframes particleFly {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes particleFlyRotate {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0) rotate(var(--rotation));
+        opacity: 0;
+    }
+}
+
+@keyframes starTwinkle {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.7); opacity: 0.7; }
+}
+
+@keyframes achievementSlideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes achievementSpin {
+    0% { transform: scale(0) rotate(-360deg); }
+    100% { transform: scale(1) rotate(0); }
+}
+
+.reset-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 20px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reset-btn:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+.reset-btn .en {
+    font-size: 12px;
+    opacity: 0.8;
+} 
