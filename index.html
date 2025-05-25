@@ -11,7 +11,8 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
-            background-color: #f4f7f9;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 50%, #dce1e6 100%);
+            background-attachment: fixed;
             color: #333;
             padding-top: 100px;
         }
@@ -57,6 +58,7 @@
             flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 20px;
+            justify-content: flex-start;
         }
         .filter-button {
             background-color: #e9ecef;
@@ -65,18 +67,20 @@
             border-radius: 20px; /* Pill shape */
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
             display: flex;
             align-items: center;
             gap: 5px;
         }
         .filter-button:hover {
             background-color: #d1d9e0;
+            transform: translateY(-1px);
         }
         .filter-button.active {
             background-color: #1a73e8;
             color: white;
             border-color: #1a73e8;
+            font-weight: bold;
         }
         .faq-category-title {
             font-size: 22px;
@@ -258,11 +262,25 @@
                 border-radius: 8px;
             }
             .filter-buttons {
-                gap: 4px;
+                gap: 8px;
+                padding: 5px 0;
+                justify-content: center;
             }
             .filter-button {
-                font-size: 11px;
-                padding: 4px 6px;
+                font-size: 14px;
+                padding: 8px 12px;
+                border-radius: 6px;
+                min-width: 80px;
+                text-align: center;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            }
+            .filter-button .icon {
+                font-size: 16px;
+                margin-right: 6px;
+            }
+            .filter-button.active {
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                font-weight: bold;
             }
             .search-container input {
                 font-size: 11px;
@@ -399,6 +417,9 @@
             filterButtonsContainer.innerHTML = '';
             if (Object.keys(faqData).length === 0) return;
 
+            // 检测是否为移动端
+            const isMobile = window.innerWidth <= 700;
+
             // 主分类按钮
             Object.keys(faqData).forEach(category => {
                 const button = document.createElement('button');
@@ -406,6 +427,16 @@
                 button.dataset.category = category;
                 const categoryIcon = faqData[category].icon || '📄';
                 button.innerHTML = `<span class="icon">${categoryIcon}</span> ${category}`;
+                
+                // 移动端特殊处理
+                if (isMobile) {
+                    // 如果是"每日更新"分类，给它特殊样式
+                    if (category === '每日更新') {
+                        button.style.background = '#e3f2fd';
+                        button.style.borderColor = '#90caf9';
+                    }
+                }
+                
                 button.onclick = () => {
                     currentCategory = category;
                     searchInput.value = '';
@@ -602,6 +633,15 @@
             }
             document.querySelectorAll('.filter-button').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.category === categoryName);
+                
+                // 移动端增强选中状态的视觉效果
+                if (window.innerWidth <= 700 && btn.dataset.category === categoryName) {
+                    btn.style.boxShadow = '0 2px 6px rgba(26, 115, 232, 0.4)';
+                    btn.style.transform = 'translateY(-1px)';
+                } else if (window.innerWidth <= 700) {
+                    btn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+                    btn.style.transform = 'none';
+                }
             });
             const categoryTitleEl = document.createElement('h2');
             categoryTitleEl.className = 'faq-category-title';
@@ -615,6 +655,15 @@
                 dateTabs.style.display = 'flex';
                 dateTabs.style.gap = '8px';
                 dateTabs.style.margin = '10px 0 18px 0';
+                
+                // 移动端日期选择器样式调整
+                if (window.innerWidth <= 700) {
+                    dateTabs.style.flexWrap = 'wrap';
+                    dateTabs.style.justifyContent = 'center';
+                    dateTabs.style.gap = '6px';
+                    dateTabs.style.padding = '5px 0';
+                }
+                
                 // 日期倒序
                 const sorted = [...categoryData.content].sort((a, b) => b.subTopic.localeCompare(a.subTopic));
                 sorted.forEach(item => {
@@ -624,6 +673,23 @@
                     btn.className = 'btn';
                     btn.style.background = date === dateFilter ? '#1a73e8' : '#e9ecef';
                     btn.style.color = date === dateFilter ? '#fff' : '#333';
+                    
+                    // 移动端日期按钮样式
+                    if (window.innerWidth <= 700) {
+                        btn.style.fontSize = '13px';
+                        btn.style.padding = '8px 10px';
+                        btn.style.margin = '2px';
+                        btn.style.borderRadius = '6px';
+                        
+                        // 增强移动端选中状态的视觉效果
+                        if (date === dateFilter) {
+                            btn.style.fontWeight = 'bold';
+                            btn.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+                        } else {
+                            btn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+                        }
+                    }
+                    
                     btn.textContent = date;
                     btn.onclick = () => displayCategory(categoryName, '', date);
                     dateTabs.appendChild(btn);
@@ -660,15 +726,38 @@
                 layout.style.display = 'flex';
                 layout.style.gap = '16px';
                 layout.style.alignItems = 'flex-start';
+                
+                // 检测是否为移动端
+                const isMobile = window.innerWidth <= 700;
+                
+                // 如果是移动端，改为垂直布局
+                if (isMobile) {
+                    layout.style.flexDirection = 'column';
+                    layout.style.gap = '10px';
+                }
+                
                 // 左侧主题栏
                 const sidebar = document.createElement('div');
                 sidebar.className = 'daily-sidebar';
-                sidebar.style.minWidth = '120px';
-                sidebar.style.maxWidth = '150px';
                 sidebar.style.background = '#f7f9fa';
                 sidebar.style.borderRadius = '6px';
                 sidebar.style.padding = '6px 2px';
                 sidebar.style.boxShadow = '0 1px 4px rgba(0,0,0,0.03)';
+                
+                // 移动端主题栏样式调整
+                if (isMobile) {
+                    sidebar.style.minWidth = 'auto';
+                    sidebar.style.maxWidth = 'none';
+                    sidebar.style.width = '100%';
+                    sidebar.style.display = 'flex';
+                    sidebar.style.flexWrap = 'wrap';
+                    sidebar.style.gap = '6px';
+                    sidebar.style.justifyContent = 'center';
+                } else {
+                    sidebar.style.minWidth = '120px';
+                    sidebar.style.maxWidth = '150px';
+                }
+                
                 // 右侧内容区
                 const mainContent = document.createElement('div');
                 mainContent.className = 'daily-main';
@@ -677,6 +766,7 @@
                 mainContent.style.borderRadius = '8px';
                 mainContent.style.padding = '12px 10px 12px 10px';
                 mainContent.style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)';
+                
                 // 当前选中主题
                 let currentTopic = topicBlocks.length > 0 ? topicBlocks[0].topic : '';
                 // 允许通过URL参数或其它方式指定当前主题
@@ -690,15 +780,31 @@
                 topicBlocks.forEach((block, idx) => {
                     const btn = document.createElement('button');
                     btn.className = 'btn';
-                    btn.style.display = 'block';
-                    btn.style.width = '100%';
-                    btn.style.marginBottom = '10px';
+                    
+                    // 移动端按钮样式调整
+                    if (isMobile) {
+                        btn.style.display = 'inline-block';
+                        btn.style.width = 'auto';
+                        btn.style.marginBottom = '0';
+                        btn.style.fontSize = '12px';
+                        btn.style.padding = '6px 8px';
+                        
+                        // 增强移动端选中状态的视觉效果
+                        if (block.topic === currentTopic) {
+                            btn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.2)';
+                        }
+                    } else {
+                        btn.style.display = 'block';
+                        btn.style.width = '100%';
+                        btn.style.marginBottom = '10px';
+                        btn.style.fontSize = '15px';
+                        btn.style.padding = '10px 6px';
+                    }
+                    
                     btn.style.background = block.topic === currentTopic ? '#1a73e8' : '#f5f5f5';
                     btn.style.color = block.topic === currentTopic ? '#fff' : '#1a73e8';
                     btn.style.fontWeight = 'bold';
-                    btn.style.fontSize = '15px';
                     btn.style.borderRadius = '4px';
-                    btn.style.padding = '10px 6px';
                     btn.style.transition = 'background 0.2s, color 0.2s';
                     btn.textContent = block.topic;
                     btn.onmouseover = () => {
@@ -930,6 +1036,18 @@
                 } else {
                     faqContentContainer.innerHTML = "<p class=\"empty-message\">请选择一个分类查看问题解答，或检查 faq-data.json 是否为空。</p>";
                 }
+                
+                // 添加窗口大小改变事件监听器
+                window.addEventListener('resize', function() {
+                    // 如果当前分类是"每日更新"，则重新加载以更新布局
+                    if (currentCategory === '每日更新') {
+                        // 使用setTimeout防止频繁触发
+                        if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
+                        this.resizeTimeout = setTimeout(() => {
+                            displayCategory(currentCategory);
+                        }, 300);
+                    }
+                });
                 
             } catch (error) {
                 console.error("无法加载或解析 faq-data.json:", error);
