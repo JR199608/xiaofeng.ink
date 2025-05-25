@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI网站开发常见问题解答</title>
+    <meta name="description" content="AI网站开发常见问题解答，涵盖工具、注册、学习、编程、AI助手等热门话题。">
+    <meta name="keywords" content="AI, 网站开发, 问答, 工具, 注册, 编程, 学习, AI助手, FAQ">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f7f9;
+            color: #333;
+            padding-top: 100px;
+        }
+        .header {
+            background-color: rgba(26, 115, 232, 0.92); /* 半透明蓝色 */
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            backdrop-filter: blur(6px);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .header p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .toc-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .filter-button {
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+            padding: 8px 15px;
+            border-radius: 20px; /* Pill shape */
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .filter-button:hover {
+            background-color: #d1d9e0;
+        }
+        .filter-button.active {
+            background-color: #1a73e8;
+            color: white;
+            border-color: #1a73e8;
+        }
+        .faq-category-title {
+            font-size: 22px;
+            color: #1a73e8;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1a73e8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .faq-item {
+            margin-bottom: 25px;
+        }
+        .faq-item h3 { /* Sub-topic title */
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-item h3::after {
+            content: "▼";
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+        .faq-item.collapsed h3::after {
+            transform: rotate(-90deg);
+        }
+        .qa-pair {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            border-left: 3px solid #e0e0e0;
+        }
+        .qa-pair .question {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: flex-start; /* Align icon with first line of text */
+            gap: 5px;
+        }
+        .qa-pair .question .icon, .filter-button .icon, .faq-category-title .icon {
+            color: #1a73e8; /* Blue icon for questions */
+        }
+        .qa-pair .answer {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #444;
+            padding-left: 22px; /* Indent answer relative to question text */
+        }
+        .icon { /* General icon styling */
+            display: inline-block;
+            margin-right: 5px; /* Space between icon and text */
+        }
+        /* Custom styles for search result highlighting */
+        mark {
+            background-color: #ffe082; /* 一个柔和的黄色，比默认的亮一些 */
+            color: #333; /* 确保文本颜色与背景对比清晰 */
+            padding: 0.1em 0.3em;
+            border-radius: 3px;
+            font-weight: bold; /* 让高亮文字稍微加粗一些 */
+        }
+        /* Style for empty search results or empty category messages */
+        .empty-message {
+            color: #757575; /* 中灰色文本 */
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+            border: 1px dashed #e0e0e0; /* 虚线边框 */
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        /* Search container with flex layout */
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .search-container input {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .search-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .search-scope {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn {
+            padding: 8px 15px;
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            background-color: #d1d9e0;
+        }
+        .btn-primary {
+            background-color: #1a73e8;
+            color: white;
+            border-color: #1a73e8;
+        }
+        .btn-primary:hover {
+            background-color: #1557b0;
+        }
+        /* Link styling */
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #1557b0;
+            text-decoration: underline;
+        }
+        .collapse-all {
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .qa-content {
+            transition: max-height 0.3s ease;
+            overflow: hidden;
+        }
+        .faq-item.collapsed .qa-content {
+            max-height: 0;
+            overflow: hidden;
+        }
+        @media (max-width: 700px) {
+            .container {
+                max-width: 100vw;
+                margin: 0;
+                padding: 8px 2px 2px 2px;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            .header {
+                padding: 6px 1vw 4px 1vw;
+                min-height: 44px;
+            }
+            .header h1, .header p {
+                text-align: left;
+                margin-left: 8px;
+            }
+            #auth-section {
+                position: absolute !important;
+                top: 8px;
+                right: 10px;
+                margin: 0;
+                gap: 0;
+                width: auto;
+                flex-direction: row;
+                align-items: flex-start;
+                z-index: 10;
+            }
+            #login-btn {
+                width: 48px;
+                height: 28px;
+                font-size: 12px;
+                padding: 0;
+                border-radius: 8px;
+            }
+            .filter-buttons {
+                gap: 4px;
+            }
+            .filter-button {
+                font-size: 11px;
+                padding: 4px 6px;
+            }
+            .search-container input {
+                font-size: 11px;
+                padding: 5px;
+            }
+            .btn, .btn-primary {
+                font-size: 11px;
+                padding: 5px 7px;
+            }
+            .faq-category-title {
+                font-size: 14px;
+            }
+            .faq-item h3 {
+                font-size: 12px;
+            }
+            .qa-pair .answer {
+                font-size: 11px;
+            }
+            #custom-modal-content {
+                font-size: 13px;
+                padding: 10px 2vw;
+            }
+            #login-email,
+            #login-password,
+            #login-error {
+                display: none !important;
+            }
+            #login-btn {
+                width: 100%;
+                margin: 0;
+            }
+        }
+        /* 自定义弹窗样式 */
+        #custom-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.25);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #custom-modal-content {
+            background: #fff;
+            padding: 32px 48px;
+            border-radius: 10px;
+            font-size: 20px;
+            color: #1a73e8;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+            text-align: center;
+            font-weight: bold;
+        }
+        /* 登录UI右上角样式 */
+        #auth-section {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            display: flex;
+            gap: 10px;
+            background: transparent;
+            margin-bottom: 0;
+            align-items: center;
+        }
+        #auth-section input {
+            min-width: 140px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AI网站开发常见问题解答</h1>
+        <p>来自生财AI网站开发群的干货分享</p>
+        <!-- === Supabase 登录UI开始 === -->
+        <div id="auth-section">
+          <div id="user-info" style="display:none;">
+            <span id="user-email"></span>
+            <button id="logout-btn" class="btn">登出</button>
+          </div>
+          <div id="login-form">
+            <input type="email" id="login-email" placeholder="邮箱" style="padding:8px; margin-right:8px;">
+            <input type="password" id="login-password" placeholder="密码" style="padding:8px; margin-right:8px;">
+            <button id="login-btn" class="btn btn-primary">登录</button>
+            <span id="login-error" style="color:red; margin-left:10px;"></span>
+          </div>
+        </div>
+        <!-- === Supabase 登录UI结束 === -->
+    </div>
+
+    <div class="container">
+        <div class="toc-title"><span class="icon">📋</span>目录</div>
+        
+        <!-- Search Input with Clear Button -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="搜索问答..." aria-label="搜索问答">
+            <button id="clearSearch" class="btn" title="清除搜索">✕</button>
+        </div>
+        
+        <!-- Search Options -->
+        <div class="search-options">
+            <div class="search-scope">
+                <label for="searchScope">搜索范围:</label>
+                <select id="searchScope" class="btn">
+                    <option value="current">当前分类</option>
+                    <option value="all">全部分类</option>
+                </select>
+            </div>
+            <div class="collapse-all" id="toggleAllSections">展开/折叠所有小节</div>
+        </div>
+
+        <div class="filter-buttons" id="filterButtons">
+            <!-- Filter buttons will be dynamically inserted here -->
+        </div>
+
+        <div id="faqContent">
+            <!-- FAQ content will be dynamically inserted here -->
+        </div>
+    </div>
+
+
+    <script>
+        // --- DOM Elements ---
+        const filterButtonsContainer = document.getElementById('filterButtons');
+        const faqContentContainer = document.getElementById('faqContent');
+        const searchInput = document.getElementById('searchInput'); 
+        const clearSearchBtn = document.getElementById('clearSearch');
+        const searchScopeSelect = document.getElementById('searchScope');
+        const toggleAllSectionsBtn = document.getElementById('toggleAllSections');
+        let faqData = {}; // Initialize faqData as an empty object
+        let currentCategory = null; // To keep track of the currently selected category
+        let allSectionsCollapsed = false; // Keep track of sections collapse state
+
+        // --- Functions ---
+        function renderFilterButtons() {
+            filterButtonsContainer.innerHTML = '';
+            if (Object.keys(faqData).length === 0) return;
+
+            // 主分类按钮
+            Object.keys(faqData).forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'filter-button';
+                button.dataset.category = category;
+                const categoryIcon = faqData[category].icon || '📄';
+                button.innerHTML = `<span class="icon">${categoryIcon}</span> ${category}`;
+                button.onclick = () => {
+                    currentCategory = category;
+                    searchInput.value = '';
+                    displayCategory(category);
+                    if (searchScopeSelect.value === 'all') {
+                        searchScopeSelect.value = 'current';
+                    }
+                };
+                filterButtonsContainer.appendChild(button);
+            });
+        }
+
+        // Convert URLs in text to clickable links
+        function makeLinksClickable(text) {
+            // Regular expression to find URLs
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, function(url) {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+            });
+        }
+
+        // Toggle content for a subtopic
+        function toggleSubtopic(subtopicElement) {
+            const faqItem = subtopicElement.closest('.faq-item');
+            faqItem.classList.toggle('collapsed');
+        }
+
+        // Global search across all categories
+        function globalSearch(searchTerm) {
+            faqContentContainer.innerHTML = ''; // Clear existing content
+            if (!searchTerm) {
+                // If no search term, display the current category or first category
+                if (currentCategory) {
+                    displayCategory(currentCategory);
+                } else if (Object.keys(faqData).length > 0) {
+                    currentCategory = Object.keys(faqData)[0];
+                    displayCategory(currentCategory);
+                }
+                return;
+            }
+
+            const resultsTitle = document.createElement('h2');
+            resultsTitle.textContent = `搜索结果: "${searchTerm}"`;
+            resultsTitle.className = 'faq-category-title';
+            faqContentContainer.appendChild(resultsTitle);
+
+            const lowerSearchTerm = searchTerm.toLowerCase();
+            let totalResults = 0;
+
+            // Search through all categories
+            Object.keys(faqData).forEach(categoryName => {
+                const categoryData = faqData[categoryName];
+                let categoryResults = 0;
+
+                if (categoryData.content && categoryData.content.length > 0) {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'search-category';
+
+                    const categoryTitle = document.createElement('h3');
+                    categoryTitle.className = 'search-category-title';
+                    categoryTitle.innerHTML = `<span class="icon">${categoryData.icon || '📄'}</span> ${categoryName}`;
+
+                    const categoryContent = document.createElement('div');
+
+                    categoryData.content.forEach(item => {
+                        const subtopicResults = [];
+
+                        item.qa.forEach(pair => {
+                            const questionMatch = pair.q.toLowerCase().includes(lowerSearchTerm);
+                            const answerMatch = pair.a.toLowerCase().includes(lowerSearchTerm);
+
+                            if (questionMatch || answerMatch) {
+                                const qaPairDiv = document.createElement('div');
+                                qaPairDiv.className = 'qa-pair';
+
+                                const questionDiv = document.createElement('div');
+                                questionDiv.className = 'question';
+                                questionDiv.innerHTML = `<span class="icon">❓</span> ${highlightMatch(pair.q, searchTerm)}`;
+                                qaPairDiv.appendChild(questionDiv);
+
+                                const answerDiv = document.createElement('div');
+                                answerDiv.className = 'answer';
+                                const highlightedAnswer = highlightMatch(pair.a, searchTerm);
+                                answerDiv.innerHTML = makeLinksClickable(highlightedAnswer.replace(/\n/g, '<br>'));
+                                qaPairDiv.appendChild(answerDiv);
+
+                                subtopicResults.push({ qaPair: qaPairDiv, subtopic: item.subTopic });
+                                categoryResults++;
+                                totalResults++;
+                            }
+                        });
+
+                        // If this subtopic has results, add them with a subtopic header
+                        if (subtopicResults.length > 0) {
+                            const subtopicGroup = document.createElement('div');
+                            subtopicGroup.className = 'faq-item';
+                            
+                            const subtopicTitle = document.createElement('h3');
+                            subtopicTitle.textContent = item.subTopic;
+                            subtopicTitle.onclick = function() {
+                                toggleSubtopic(this);
+                            };
+                            subtopicGroup.appendChild(subtopicTitle);
+                            
+                            const qaContent = document.createElement('div');
+                            qaContent.className = 'qa-content';
+                            
+                            subtopicResults.forEach(result => {
+                                qaContent.appendChild(result.qaPair);
+                            });
+                            
+                            subtopicGroup.appendChild(qaContent);
+                            categoryContent.appendChild(subtopicGroup);
+                        }
+                    });
+
+                    // If this category has results, add them to the main container
+                    if (categoryResults > 0) {
+                        categoryDiv.appendChild(categoryTitle);
+                        categoryDiv.appendChild(categoryContent);
+                        faqContentContainer.appendChild(categoryDiv);
+                    }
+                }
+            });
+
+            if (totalResults === 0) {
+                const noResultsEl = document.createElement('p');
+                noResultsEl.className = 'empty-message';
+                noResultsEl.textContent = '没有找到与 "' + searchTerm + '" 匹配的结果。';
+                faqContentContainer.appendChild(noResultsEl);
+            }
+        }
+
+        // --- Functions ---
+        function renderTopicCloudInButtonsAlways() {
+            // 先移除已有热点云
+            const oldCloud = document.getElementById('topicCloudInline');
+            if (oldCloud) oldCloud.remove();
+            // 获取每日更新下的分组
+            const daily = faqData['每日更新'];
+            if (!daily || !daily.content || daily.content.length === 0) return;
+            // 默认取最新日期
+            const sorted = [...daily.content].sort((a, b) => b.subTopic.localeCompare(a.subTopic));
+            const dayItem = sorted[0];
+            let topicBlocks = [];
+            if (dayItem.topics && Array.isArray(dayItem.topics)) {
+                topicBlocks = dayItem.topics;
+            } else if (dayItem.qa && Array.isArray(dayItem.qa)) {
+                topicBlocks = [{ topic: '未分组', qa: dayItem.qa }];
+            } else if (dayItem.blocks && Array.isArray(dayItem.blocks)) {
+                topicBlocks = dayItem.blocks;
+            }
+            if (!topicBlocks.length) return;
+            const topicCloud = document.createElement('div');
+            topicCloud.id = 'topicCloudInline';
+            topicCloud.style.display = 'flex';
+            topicCloud.style.flexWrap = 'wrap';
+            topicCloud.style.gap = '10px';
+            topicCloud.style.marginLeft = '20px';
+            topicCloud.style.alignItems = 'center';
+            topicBlocks.forEach(block => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.style.background = '#f5f5f5';
+                btn.style.color = '#1a73e8';
+                btn.style.fontWeight = 'bold';
+                btn.textContent = block.topic;
+                btn.onclick = () => {
+                    // 切换到每日更新并跳转到对应分组
+                    currentCategory = '每日更新';
+                    displayCategory('每日更新');
+                    setTimeout(() => {
+                        const anchor = document.getElementById('topic-' + block.topic.replace(/[^\u4e00-\u9fa5\w]/g, ''));
+                        if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                };
+                topicCloud.appendChild(btn);
+            });
+            filterButtonsContainer.appendChild(topicCloud);
+        }
+
+        // --- 修改displayCategory，热点云渲染到filter-buttons内部 ---
+        function displayCategory(categoryName, searchTerm = '', dateFilter = '') {
+            faqContentContainer.innerHTML = '';
+            renderFilterButtons(); // 每次切换分类都刷新主按钮和热点云
+            if (Object.keys(faqData).length === 0) {
+                faqContentContainer.innerHTML = '<p class="empty-message">数据加载中或加载失败，请稍后再试。</p>';
+                return;
+            }
+            const categoryData = faqData[categoryName];
+            if (!categoryData) {
+                faqContentContainer.innerHTML = '<p class="empty-message">请先选择一个分类。</p>';
+                return;
+            }
+            document.querySelectorAll('.filter-button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.category === categoryName);
+            });
+            const categoryTitleEl = document.createElement('h2');
+            categoryTitleEl.className = 'faq-category-title';
+            const categoryIcon = categoryData.icon || '📄';
+            categoryTitleEl.innerHTML = `<span class="icon">${categoryIcon}</span> ${categoryName}`;
+            faqContentContainer.appendChild(categoryTitleEl);
+            // --- 每日更新日期Tab ---
+            if (categoryName === '每日更新') {
+                // 日期按钮组
+                const dateTabs = document.createElement('div');
+                dateTabs.style.display = 'flex';
+                dateTabs.style.gap = '8px';
+                dateTabs.style.margin = '10px 0 18px 0';
+                // 日期倒序
+                const sorted = [...categoryData.content].sort((a, b) => b.subTopic.localeCompare(a.subTopic));
+                sorted.forEach(item => {
+                    const m = item.subTopic.match(/^(\d{4}-\d{2}-\d{2})/);
+                    const date = m ? m[1] : item.subTopic;
+                    const btn = document.createElement('button');
+                    btn.className = 'btn';
+                    btn.style.background = date === dateFilter ? '#1a73e8' : '#e9ecef';
+                    btn.style.color = date === dateFilter ? '#fff' : '#333';
+                    btn.textContent = date;
+                    btn.onclick = () => displayCategory(categoryName, '', date);
+                    dateTabs.appendChild(btn);
+                });
+                faqContentContainer.appendChild(dateTabs);
+                // 默认选中第一个日期
+                let showDate = dateFilter;
+                if (!showDate && sorted.length > 0) {
+                    const m = sorted[0].subTopic.match(/^(\d{4}-\d{2}-\d{2})/);
+                    showDate = m ? m[1] : sorted[0].subTopic;
+                }
+                // 找到当天数据
+                const dayItem = sorted.find(item => {
+                    const m = item.subTopic.match(/^(\d{4}-\d{2}-\d{2})/);
+                    const date = m ? m[1] : item.subTopic;
+                    return date === showDate;
+                });
+                if (!dayItem) {
+                    faqContentContainer.appendChild(document.createTextNode('该天无内容'));
+                    return;
+                }
+                // 解析话题分组
+                let topicBlocks = [];
+                if (dayItem.topics && Array.isArray(dayItem.topics)) {
+                    topicBlocks = dayItem.topics;
+                } else if (dayItem.qa && Array.isArray(dayItem.qa)) {
+                    topicBlocks = [{ topic: '未分组', qa: dayItem.qa }];
+                } else if (dayItem.blocks && Array.isArray(dayItem.blocks)) {
+                    topicBlocks = dayItem.blocks;
+                }
+                // --- 新增：左右分栏 ---
+                const layout = document.createElement('div');
+                layout.className = 'daily-layout';
+                layout.style.display = 'flex';
+                layout.style.gap = '16px';
+                layout.style.alignItems = 'flex-start';
+                // 左侧主题栏
+                const sidebar = document.createElement('div');
+                sidebar.className = 'daily-sidebar';
+                sidebar.style.minWidth = '120px';
+                sidebar.style.maxWidth = '150px';
+                sidebar.style.background = '#f7f9fa';
+                sidebar.style.borderRadius = '6px';
+                sidebar.style.padding = '6px 2px';
+                sidebar.style.boxShadow = '0 1px 4px rgba(0,0,0,0.03)';
+                // 右侧内容区
+                const mainContent = document.createElement('div');
+                mainContent.className = 'daily-main';
+                mainContent.style.flex = '1';
+                mainContent.style.background = '#fff';
+                mainContent.style.borderRadius = '8px';
+                mainContent.style.padding = '12px 10px 12px 10px';
+                mainContent.style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)';
+                // 当前选中主题
+                let currentTopic = topicBlocks.length > 0 ? topicBlocks[0].topic : '';
+                // 允许通过URL参数或其它方式指定当前主题
+                if (dateFilter && dateFilter.includes('||')) {
+                    const arr = dateFilter.split('||');
+                    showDate = arr[0];
+                    currentTopic = arr[1];
+                }
+                // 渲染左侧主题按钮
+                sidebar.innerHTML = '';
+                topicBlocks.forEach((block, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn';
+                    btn.style.display = 'block';
+                    btn.style.width = '100%';
+                    btn.style.marginBottom = '10px';
+                    btn.style.background = block.topic === currentTopic ? '#1a73e8' : '#f5f5f5';
+                    btn.style.color = block.topic === currentTopic ? '#fff' : '#1a73e8';
+                    btn.style.fontWeight = 'bold';
+                    btn.style.fontSize = '15px';
+                    btn.style.borderRadius = '4px';
+                    btn.style.padding = '10px 6px';
+                    btn.style.transition = 'background 0.2s, color 0.2s';
+                    btn.textContent = block.topic;
+                    btn.onmouseover = () => {
+                        if (btn.style.background !== 'rgb(26, 115, 232)') btn.style.background = '#e3f0fd';
+                    };
+                    btn.onmouseout = () => {
+                        if (block.topic === currentTopic) {
+                            btn.style.background = '#1a73e8';
+                            btn.style.color = '#fff';
+                        } else {
+                            btn.style.background = '#f5f5f5';
+                            btn.style.color = '#1a73e8';
+                        }
+                    };
+                    btn.onclick = () => {
+                        currentTopic = block.topic;
+                        renderMainContent(block.topic);
+                        Array.from(sidebar.children).forEach(b => {
+                            b.style.background = '#f5f5f5';
+                            b.style.color = '#1a73e8';
+                        });
+                        btn.style.background = '#1a73e8';
+                        btn.style.color = '#fff';
+                    };
+                    sidebar.appendChild(btn);
+                });
+                // 渲染右侧内容函数
+                function renderMainContent(topic) {
+                    mainContent.innerHTML = '';
+                    const block = topicBlocks.find(b => b.topic === topic);
+                    if (block && block.qa && block.qa.length > 0) {
+                        block.qa.forEach(pair => {
+                            const qaPairDiv = document.createElement('article');
+                            qaPairDiv.className = 'qa-pair';
+                            const questionDiv = document.createElement('h4');
+                            questionDiv.className = 'question';
+                            questionDiv.innerHTML = `<span class=\"icon\">❓</span> ${pair.q}`;
+                            qaPairDiv.appendChild(questionDiv);
+                            const answerDiv = document.createElement('p');
+                            answerDiv.className = 'answer';
+                            answerDiv.innerHTML = makeLinksClickable(pair.a.replace(/\n/g, '<br>'));
+                            qaPairDiv.appendChild(answerDiv);
+                            mainContent.appendChild(qaPairDiv);
+                        });
+                    } else {
+                        const emptyMsg = document.createElement('p');
+                        emptyMsg.className = 'empty-message';
+                        emptyMsg.textContent = '该话题下暂无内容';
+                        mainContent.appendChild(emptyMsg);
+                    }
+                }
+                // 初始渲染右侧内容
+                renderMainContent(currentTopic);
+                layout.appendChild(sidebar);
+                layout.appendChild(mainContent);
+                faqContentContainer.appendChild(layout);
+                return;
+            } else {
+                // 非每日更新时移除热点云
+                const oldCloud = document.getElementById('topicCloudInline');
+                if (oldCloud) oldCloud.remove();
+            }
+            const lowerSearchTerm = searchTerm.toLowerCase();
+            let matchFound = false;
+            let contentRendered = false;
+            if (categoryData.content && categoryData.content.length > 0) {
+                categoryData.content.forEach(item => {
+                    // 只显示选中的日期
+                    if (categoryName === '每日更新' && dateFilter) {
+                        const m = item.subTopic.match(/^(\d{4}-\d{2}-\d{2})/);
+                        const date = m ? m[1] : item.subTopic;
+                        if (date !== dateFilter) return;
+                    }
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'faq-item';
+                    let subTopicHasVisibleQA = false;
+                    const subTopicTitle = document.createElement('h3');
+                    subTopicTitle.textContent = item.subTopic;
+                    subTopicTitle.onclick = function() { toggleSubtopic(this); };
+                    const qaContentDiv = document.createElement('div');
+                    qaContentDiv.className = 'qa-content';
+                    item.qa.forEach(pair => {
+                        const questionMatch = pair.q.toLowerCase().includes(lowerSearchTerm);
+                        const answerMatch = pair.a.toLowerCase().includes(lowerSearchTerm);
+                        if (!searchTerm || questionMatch || answerMatch) {
+                            const qaPairDiv = document.createElement('div');
+                            qaPairDiv.className = 'qa-pair';
+                            const questionDiv = document.createElement('div');
+                            questionDiv.className = 'question';
+                            questionDiv.innerHTML = `<span class="icon">❓</span> ${highlightMatch(pair.q, searchTerm)}`;
+                            qaPairDiv.appendChild(questionDiv);
+                            const answerDiv = document.createElement('div');
+                            answerDiv.className = 'answer';
+                            const highlightedAnswer = highlightMatch(pair.a, searchTerm);
+                            answerDiv.innerHTML = makeLinksClickable(highlightedAnswer.replace(/\n/g, '<br>'));
+                            qaPairDiv.appendChild(answerDiv);
+                            qaContentDiv.appendChild(qaPairDiv);
+                            subTopicHasVisibleQA = true;
+                            matchFound = true;
+                        }
+                    });
+                    if (subTopicHasVisibleQA) {
+                        itemDiv.appendChild(subTopicTitle);
+                        if (item.title) {
+                            const titleDiv = document.createElement('div');
+                            titleDiv.style.fontWeight = 'bold';
+                            titleDiv.style.fontSize = '18px';
+                            titleDiv.style.margin = '10px 0 5px 0';
+                            titleDiv.textContent = item.title;
+                            itemDiv.appendChild(titleDiv);
+                        }
+                        itemDiv.appendChild(qaContentDiv);
+                        faqContentContainer.appendChild(itemDiv);
+                        contentRendered = true;
+                    } else if (!searchTerm) {
+                        itemDiv.appendChild(subTopicTitle);
+                        itemDiv.appendChild(qaContentDiv);
+                        faqContentContainer.appendChild(itemDiv);
+                        contentRendered = true;
+                    }
+                });
+            } else {
+                contentRendered = false;
+            }
+            if (searchTerm && !matchFound) {
+                const noResultsEl = document.createElement('p');
+                noResultsEl.className = 'empty-message';
+                noResultsEl.textContent = '在此分类下没有找到与 "' + searchTerm + '" 匹配的结果。';
+                faqContentContainer.appendChild(noResultsEl);
+            }
+            if (!searchTerm && !contentRendered) {
+                const emptyCatEl = document.createElement('p');
+                emptyCatEl.className = 'empty-message';
+                emptyCatEl.textContent = '此分类下暂无内容。';
+                faqContentContainer.appendChild(emptyCatEl);
+            }
+        }
+
+        // Function to toggle all sections (expand/collapse)
+        function toggleAllSections() {
+            allSectionsCollapsed = !allSectionsCollapsed;
+            document.querySelectorAll('.faq-item').forEach(item => {
+                if (allSectionsCollapsed) {
+                    item.classList.add('collapsed');
+                } else {
+                    item.classList.remove('collapsed');
+                }
+            });
+        }
+
+        // Function to highlight search term in text (simple version)
+        function highlightMatch(text, term) {
+            if (!term) return text;
+            const lowerText = text.toLowerCase();
+            const lowerTerm = term.toLowerCase();
+            let startIndex = 0;
+            let result = '';
+            let pos = lowerText.indexOf(lowerTerm, startIndex);
+
+            while (pos !== -1) {
+                result += text.substring(startIndex, pos) + `<mark>${text.substring(pos, pos + term.length)}</mark>`;
+                startIndex = pos + term.length;
+                pos = lowerText.indexOf(lowerTerm, startIndex);
+            }
+            result += text.substring(startIndex);
+            return result;
+        }
+
+        // --- Event Listeners ---
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value;
+                if (searchScopeSelect.value === 'all') {
+                    globalSearch(searchTerm);
+                } else if (currentCategory) { // Search in current category
+                    displayCategory(currentCategory, searchTerm);
+                } else if (!currentCategory && Object.keys(faqData).length > 0) {
+                    // If no category selected yet, select first one
+                    currentCategory = Object.keys(faqData)[0];
+                    displayCategory(currentCategory, searchTerm);
+                }
+            });
+        }
+
+        // Clear search button
+        if (clearSearchBtn) {
+            clearSearchBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                if (currentCategory) {
+                    displayCategory(currentCategory);
+                } else if (Object.keys(faqData).length > 0) {
+                    currentCategory = Object.keys(faqData)[0];
+                    displayCategory(currentCategory);
+                }
+            });
+        }
+
+        // Search scope change
+        if (searchScopeSelect) {
+            searchScopeSelect.addEventListener('change', () => {
+                const searchTerm = searchInput.value;
+                if (searchTerm) {
+                    if (searchScopeSelect.value === 'all') {
+                        globalSearch(searchTerm);
+                    } else if (currentCategory) {
+                        displayCategory(currentCategory, searchTerm);
+                    }
+                }
+            });
+        }
+
+        // Toggle all sections
+        if (toggleAllSectionsBtn) {
+            toggleAllSectionsBtn.addEventListener('click', toggleAllSections);
+        }
+
+        // --- Initial Load ---
+        async function initializeApp() {
+            try {
+                const response = await fetch('faq-data.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                faqData = await response.json();
+                renderFilterButtons();
+                currentCategory = Object.keys(faqData)[0] || null;
+                if (currentCategory) {
+                    displayCategory(currentCategory);
+                } else {
+                    faqContentContainer.innerHTML = "<p class=\"empty-message\">请选择一个分类查看问题解答，或检查 faq-data.json 是否为空。</p>";
+                }
+                
+            } catch (error) {
+                console.error("无法加载或解析 faq-data.json:", error);
+                faqContentContainer.innerHTML = `<p class=\"empty-message\">错误：无法加载问答数据。请检查控制台获取更多信息，并确认 'faq-data.json' 文件存在且格式正确。</p>`;
+            }
+        }
+
+        initializeApp();
+        // === Supabase 登录逻辑开始 ===
+        const SUPABASE_URL = 'https://你的supabase项目url.supabase.co'; // TODO: 替换为你的Supabase项目URL
+        const SUPABASE_ANON_KEY = '你的anon公钥'; // TODO: 替换为你的Supabase anon公钥
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const loginForm = document.getElementById('login-form');
+        const loginBtn = document.getElementById('login-btn');
+        const loginEmail = document.getElementById('login-email');
+        const loginPassword = document.getElementById('login-password');
+        const loginError = document.getElementById('login-error');
+        const userInfo = document.getElementById('user-info');
+        const userEmail = document.getElementById('user-email');
+        const logoutBtn = document.getElementById('logout-btn');
+        if (loginBtn) {
+          loginBtn.onclick = function() {
+            var modal = document.getElementById('custom-modal');
+            modal.style.display = 'flex';
+            setTimeout(function() {
+              modal.style.display = 'none';
+            }, 1800);
+          };
+        }
+        if (logoutBtn) {
+          logoutBtn.onclick = async function() {
+            await supabase.auth.signOut();
+            showLogin();
+          };
+        }
+        function showUser(user) {
+          loginForm.style.display = 'none';
+          userInfo.style.display = 'block';
+          userEmail.textContent = user.email;
+        }
+        function showLogin() {
+          loginForm.style.display = 'block';
+          userInfo.style.display = 'none';
+          loginEmail.value = '';
+          loginPassword.value = '';
+        }
+        async function checkAuth() {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            showUser(user);
+          } else {
+            showLogin();
+          }
+        }
+        checkAuth();
+        // === Supabase 登录逻辑结束 ===
+    </script>
+    <!-- 自定义弹窗 -->
+    <div id="custom-modal">
+      <div id="custom-modal-content">
+        正在加急处理ing
+      </div>
+    </div>
+</body>
+</html> 

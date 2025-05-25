@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ管理工具</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #1a73e8;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .btn {
+            padding: 8px 15px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #1557b0;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        .btn-success {
+            background-color: #28a745;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+        .faq-categories {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .category-list {
+            width: 250px;
+            border-right: 1px solid #eee;
+            padding-right: 20px;
+            margin-right: 20px;
+        }
+        .category-item {
+            padding: 8px 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        .category-item:hover {
+            background-color: #f0f0f0;
+        }
+        .category-item.active {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+            font-weight: bold;
+        }
+        .content-area {
+            flex: 1;
+        }
+        .section-container {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .qa-pair {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .qa-pair .actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .subtopic-container {
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px;
+        }
+        .subtopic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .import-export {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .notification {
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            animation: fadeOut 3s ease-in-out forwards;
+            animation-delay: 2s;
+        }
+        .notification.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .notification.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
+        }
+        .hidden {
+            display: none;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: #fff;
+            border-color: #dee2e6;
+            color: #1a73e8;
+            margin-bottom: -1px;
+            border-bottom: 1px solid #fff;
+        }
+        .qa-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .daily-update {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .move-controls {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        .move-btn {
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 2px 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>FAQ管理工具</h1>
+            <div class="btn-group">
+                <button id="saveAllBtn" class="btn btn-success">保存所有修改</button>
+                <button id="exportJsonBtn" class="btn">导出JSON</button>
+                <button id="importJsonBtn" class="btn btn-secondary">导入JSON</button>
+            </div>
+        </div>
+        
+        <div id="notifications"></div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="faq-editor">FAQ编辑器</div>
+            <div class="tab" data-tab="daily-updates">每日更新</div>
+            <div class="tab" data-tab="settings">设置</div>
+        </div>
+        
+        <div id="faq-editor" class="tab-content">
+            <div class="faq-categories">
+                <div class="category-list">
+                    <h2>分类</h2>
+                    <div id="categoryList"></div>
+                    <button id="addCategoryBtn" class="btn">添加分类</button>
+                </div>
+                
+                <div class="content-area">
+                    <div id="categoryDetail">
+                        <div class="section-container" id="categoryEditSection">
+                            <h2>分类详情</h2>
+                            <div class="form-group">
+                                <label for="categoryName">分类名称</label>
+                                <input type="text" id="categoryName">
+                            </div>
+                            <div class="form-group">
+                                <label for="categoryIcon">分类图标</label>
+                                <input type="text" id="categoryIcon" placeholder="例如: 📚">
+                            </div>
+                            <div class="btn-group">
+                                <button id="saveCategoryBtn" class="btn">保存分类</button>
+                                <button id="deleteCategoryBtn" class="btn btn-danger">删除分类</button>
+                            </div>
+                        </div>
+                        
+                        <div class="section-container" id="subtopicSection">
+                            <h2>子主题列表</h2>
+                            <div id="subtopicList"></div>
+                            <button id="addSubtopicBtn" class="btn">添加子主题</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="daily-updates" class="tab-content hidden">
+            <h2>每日更新管理</h2>
+            <p>在这里可以管理和添加每日更新的聊天记录，自动放入"每日更新"分类</p>
+            
+            <div class="form-group">
+                <label for="updateDate">日期 (YYYY-MM-DD)</label>
+                <input type="date" id="updateDate">
+            </div>
+            
+            <div class="form-group">
+                <label for="chatImport">导入聊天记录 (每行一条)</label>
+                <textarea id="chatImport" placeholder="格式: Q: 问题内容&#10;A: 回答内容"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="processType">处理方式</label>
+                <select id="processType">
+                    <option value="auto">自动处理 (智能合并相似问题)</option>
+                    <option value="manual">手动处理 (保留所有原始内容)</option>
+                </select>
+            </div>
+            
+            <button id="processChatBtn" class="btn">处理并预览</button>
+            
+            <div id="chatPreview" class="daily-update hidden">
+                <h3>预览</h3>
+                <div id="previewContent"></div>
+                <button id="saveUpdateBtn" class="btn btn-success">保存到每日更新</button>
+            </div>
+        </div>
+        
+        <div id="settings" class="tab-content hidden">
+            <h2>设置</h2>
+            
+            <div class="form-group">
+                <label for="backupInterval">自动备份间隔 (分钟)</label>
+                <input type="number" id="backupInterval" min="1" value="5">
+            </div>
+            
+            <div class="form-group">
+                <label for="maxBackups">保留备份数量</label>
+                <input type="number" id="maxBackups" min="1" value="10">
+            </div>
+            
+            <h3>备份历史</h3>
+            <div id="backupHistory"></div>
+            
+            <div class="btn-group">
+                <button id="saveSettingsBtn" class="btn">保存设置</button>
+                <button id="createBackupBtn" class="btn btn-secondary">立即创建备份</button>
+            </div>
+        </div>
+        
+        <!-- 模态框用于添加/编辑QA对 -->
+        <div id="qaModal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>编辑问答对</h2>
+                <div class="form-group">
+                    <label for="questionInput">问题</label>
+                    <textarea id="questionInput"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="answerInput">回答</label>
+                    <textarea id="answerInput"></textarea>
+                </div>
+                <button id="saveQaBtn" class="btn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let faqData = {};
+        let currentCategory = null;
+        let currentSubtopic = null;
+        let unsavedChanges = false;
+        
+        // 初始化
+        function init() {
+            // 从localStorage加载数据
+            const storedData = localStorage.getItem('faqData');
+            if (storedData) {
+                try {
+                    faqData = JSON.parse(storedData);
+                } catch (e) {
+                    console.error('加载本地存储数据失败:', e);
+                    // 如果解析失败，使用默认数据
+                }
+            } else {
+                // 如果localStorage中没有数据，则加载默认数据
+                loadFaqData();
+            }
+            
+            renderCategoryList();
+            
+            // 设置事件监听器
+            document.getElementById('saveAllBtn').addEventListener('click', saveAllData);
+            document.getElementById('exportJsonBtn').addEventListener('click', exportJson);
+            document.getElementById('importJsonBtn').addEventListener('click', importJson);
+            document.getElementById('addCategoryBtn').addEventListener('click', addNewCategory);
+            document.getElementById('saveCategoryBtn').addEventListener('click', saveCategory);
+            document.getElementById('deleteCategoryBtn').addEventListener('click', deleteCategory);
+            document.getElementById('addSubtopicBtn').addEventListener('click', addNewSubtopic);
+            document.getElementById('processChatBtn').addEventListener('click', processChatImport);
+            document.getElementById('saveUpdateBtn').addEventListener('click', saveUpdate);
+            
+            // 标签页切换
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.dataset.tab;
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.remove('hidden');
+                });
+            });
+            
+            // 设置今天的日期
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('updateDate').value = today;
+            
+            // 检查URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            if (category && faqData[category]) {
+                selectCategory(category);
+            }
+            
+            // 未保存提醒
+            window.addEventListener('beforeunload', function(e) {
+                if (unsavedChanges) {
+                    e.preventDefault();
+                    e.returnValue = '你有未保存的更改，确定要离开吗？';
+                    return e.returnValue;
+                }
+            });
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // 加载FAQ数据
+        function loadFaqData() {
+            // 如果已经从localStorage加载了数据，则不重复加载
+            if (Object.keys(faqData).length > 0) {
+                return;
+            }
+            
+            // 这里应该是从服务器获取数据
+            // 为了演示，我们使用一些示例数据
+            faqData = {
+                "AI工具与平台使用": {
+                    "icon": "🛠️",
+                    "content": [
+                        {
+                            "subTopic": "Claude AI",
+                            "qa": [
+                                {
+                                    "q": "Claude AI 有哪些功能？",
+                                    "a": "Claude AI 是一个强大的AI助手，可以进行对话、编写文案、回答问题、总结文本等。"
+                                },
+                                {
+                                    "q": "如何使用 Claude AI？",
+                                    "a": "可以通过官方网站 claude.ai 注册账号后使用，或者通过 Slack 等集成平台使用。"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "账号注册与配置": {
+                    "icon": "👤",
+                    "content": [
+                        {
+                            "subTopic": "注册教程",
+                            "qa": [
+                                {
+                                    "q": "如何注册 Claude AI？",
+                                    "a": "访问 claude.ai，点击注册，填写邮箱和密码，完成验证即可。"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "学习资源与技巧": {
+                    "icon": "📚",
+                    "content": []
+                },
+                "课程与社群": {
+                    "icon": "👨‍🏫",
+                    "content": []
+                },
+                "技术问题与讨论": {
+                    "icon": "💻",
+                    "content": []
+                },
+                "其他问题": {
+                    "icon": "❓",
+                    "content": []
+                },
+                "每日更新": {
+                    "icon": "🗓️",
+                    "content": []
+                }
+            };
+        }
+        
+        // 渲染分类列表
+        function renderCategoryList() {
+            const categoryList = document.getElementById('categoryList');
+            categoryList.innerHTML = '';
+            
+            Object.keys(faqData).forEach(category => {
+                const categoryItem = document.createElement('div');
+                categoryItem.className = 'category-item';
+                categoryItem.textContent = `${faqData[category].icon || '📄'} ${category}`;
+                categoryItem.dataset.category = category;
+                
+                if (currentCategory === category) {
+                    categoryItem.classList.add('active');
+                }
+                
+                categoryItem.addEventListener('click', function() {
+                    selectCategory(category);
+                });
+                
+                categoryList.appendChild(categoryItem);
+            });
+        }
+        
+        // 选择分类
+        function selectCategory(category) {
+            currentCategory = category;
+            currentSubtopic = null;
+            
+            // 更新UI
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.category === category) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // 填充分类详情
+            const categoryData = faqData[category];
+            document.getElementById('categoryName').value = category;
+            document.getElementById('categoryIcon').value = categoryData.icon || '';
+            
+            // 渲染子主题列表
+            renderSubtopicList(category);
+        }
+        
+        // 渲染子主题列表
+        function renderSubtopicList(category) {
+            const subtopicList = document.getElementById('subtopicList');
+            subtopicList.innerHTML = '';
+            
+            const categoryData = faqData[category];
+            if (!categoryData.content || !Array.isArray(categoryData.content)) {
+                categoryData.content = [];
+            }
+            
+            categoryData.content.forEach((subtopic, index) => {
+                const subtopicContainer = document.createElement('div');
+                subtopicContainer.className = 'subtopic-container';
+                
+                const subtopicHeader = document.createElement('div');
+                subtopicHeader.className = 'subtopic-header';
+                
+                const subtopicTitle = document.createElement('h3');
+                subtopicTitle.textContent = subtopic.subTopic;
+                
+                const actionBtns = document.createElement('div');
+                actionBtns.className = 'btn-group';
+                
+                const editBtn = document.createElement('button');
+                editBtn.className = 'btn';
+                editBtn.textContent = '编辑';
+                editBtn.addEventListener('click', () => editSubtopic(category, index));
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn btn-danger';
+                deleteBtn.textContent = '删除';
+                deleteBtn.addEventListener('click', () => deleteSubtopic(category, index));
+                
+                // 导出按钮（仅每日更新分类显示）
+                if (category === '每日更新') {
+                    const exportBtn = document.createElement('button');
+                    exportBtn.className = 'btn btn-secondary';
+                    exportBtn.textContent = '导出';
+                    exportBtn.addEventListener('click', () => {
+                        const subtopicData = faqData[category].content[index];
+                        const jsonString = JSON.stringify(subtopicData, null, 2);
+                        const blob = new Blob([jsonString], { type: 'application/json' });
+                        const a = document.createElement('a');
+                        a.href = URL.createObjectURL(blob);
+                        a.download = `${subtopicData.subTopic}.json`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    });
+                    actionBtns.appendChild(exportBtn);
+                }
+                
+                actionBtns.appendChild(editBtn);
+                actionBtns.appendChild(deleteBtn);
+                
+                subtopicHeader.appendChild(subtopicTitle);
+                subtopicHeader.appendChild(actionBtns);
+                
+                subtopicContainer.appendChild(subtopicHeader);
+                
+                // 添加问答对列表
+                const qaList = document.createElement('div');
+                qaList.className = 'qa-list';
+                
+                // 如果有标题，显示标题
+                if (subtopic.title) {
+                    const titleDiv = document.createElement('div');
+                    titleDiv.style.fontWeight = 'bold';
+                    titleDiv.style.fontSize = '18px';
+                    titleDiv.style.margin = '10px 0 5px 0';
+                    titleDiv.textContent = subtopic.title;
+                    qaList.appendChild(titleDiv);
+                }
+                
+                if (subtopic.qa && Array.isArray(subtopic.qa)) {
+                    subtopic.qa.forEach((qa, qaIndex) => {
+                        const qaPair = document.createElement('div');
+                        qaPair.className = 'qa-pair';
+                        
+                        const question = document.createElement('div');
+                        question.innerHTML = `<strong>Q:</strong> ${qa.q}`;
+                        
+                        const answer = document.createElement('div');
+                        answer.innerHTML = `<strong>A:</strong> ${qa.a}`;
+                        
+                        const actions = document.createElement('div');
+                        actions.className = 'actions';
+                        
+                        const editQaBtn = document.createElement('button');
+                        editQaBtn.className = 'btn btn-secondary';
+                        editQaBtn.textContent = '编辑';
+                        editQaBtn.addEventListener('click', () => editQaPair(category, index, qaIndex));
+                        
+                        const deleteQaBtn = document.createElement('button');
+                        deleteQaBtn.className = 'btn btn-danger';
+                        deleteQaBtn.textContent = '删除';
+                        deleteQaBtn.addEventListener('click', () => deleteQaPair(category, index, qaIndex));
+                        
+                        actions.appendChild(editQaBtn);
+                        actions.appendChild(deleteQaBtn);
+                        
+                        // 添加上移、下移按钮
+                        const moveControls = document.createElement('div');
+                        moveControls.className = 'move-controls';
+                        
+                        const moveUpBtn = document.createElement('button');
+                        moveUpBtn.className = 'move-btn';
+                        moveUpBtn.textContent = '上移';
+                        moveUpBtn.disabled = qaIndex === 0;
+                        moveUpBtn.addEventListener('click', () => moveQaPair(category, index, qaIndex, 'up'));
+                        
+                        const moveDownBtn = document.createElement('button');
+                        moveDownBtn.className = 'move-btn';
+                        moveDownBtn.textContent = '下移';
+                        moveDownBtn.disabled = qaIndex === subtopic.qa.length - 1;
+                        moveDownBtn.addEventListener('click', () => moveQaPair(category, index, qaIndex, 'down'));
+                        
+                        moveControls.appendChild(moveUpBtn);
+                        moveControls.appendChild(moveDownBtn);
+                        
+                        qaPair.appendChild(question);
+                        qaPair.appendChild(answer);
+                        qaPair.appendChild(actions);
+                        qaPair.appendChild(moveControls);
+                        
+                        qaList.appendChild(qaPair);
+                    });
+                }
+                
+                subtopicContainer.appendChild(qaList);
+                
+                // 添加新问答对按钮
+                const addQaBtn = document.createElement('button');
+                addQaBtn.className = 'btn';
+                addQaBtn.textContent = '添加问答对';
+                addQaBtn.addEventListener('click', () => addNewQaPair(category, index));
+                
+                subtopicContainer.appendChild(addQaBtn);
+                
+                subtopicList.appendChild(subtopicContainer);
+            });
+        }
+        
+        // 添加新分类
+        function addNewCategory() {
+            const newCategoryName = prompt('请输入新分类名称:');
+            if (!newCategoryName || newCategoryName.trim() === '') return;
+            
+            if (faqData[newCategoryName]) {
+                showNotification('分类已存在', 'error');
+                return;
+            }
+            
+            faqData[newCategoryName] = {
+                icon: '📄',
+                content: []
+            };
+            
+            unsavedChanges = true;
+            renderCategoryList();
+            selectCategory(newCategoryName);
+            showNotification('分类已添加', 'success');
+        }
+        
+        // 保存分类
+        function saveCategory() {
+            if (!currentCategory) return;
+            
+            const newName = document.getElementById('categoryName').value.trim();
+            const newIcon = document.getElementById('categoryIcon').value.trim();
+            
+            if (newName === '') {
+                showNotification('分类名称不能为空', 'error');
+                return;
+            }
+            
+            const categoryData = faqData[currentCategory];
+            
+            // 如果名称已更改
+            if (newName !== currentCategory) {
+                if (faqData[newName]) {
+                    showNotification('分类名已存在', 'error');
+                    return;
+                }
+                
+                // 创建新条目并复制数据
+                faqData[newName] = {
+                    icon: newIcon || '📄',
+                    content: categoryData.content || []
+                };
+                
+                // 删除旧条目
+                delete faqData[currentCategory];
+                currentCategory = newName;
+            } else {
+                // 只更新图标
+                categoryData.icon = newIcon || '📄';
+            }
+            
+            unsavedChanges = true;
+            renderCategoryList();
+            selectCategory(currentCategory);
+            showNotification('分类已保存', 'success');
+        }
+        
+        // 删除分类
+        function deleteCategory() {
+            if (!currentCategory) return;
+            
+            if (!confirm(`确定要删除分类 "${currentCategory}" 及其所有内容吗？`)) {
+                return;
+            }
+            
+            delete faqData[currentCategory];
+            currentCategory = null;
+            
+            unsavedChanges = true;
+            renderCategoryList();
+            document.getElementById('categoryDetail').innerHTML = '<p>请选择或创建一个分类</p>';
+            showNotification('分类已删除', 'success');
+        }
+        
+        // 添加新子主题
+        function addNewSubtopic() {
+            if (!currentCategory) {
+                showNotification('请先选择一个分类', 'error');
+                return;
+            }
+            
+            const subTopicName = prompt('请输入子主题名称:');
+            if (!subTopicName || subTopicName.trim() === '') return;
+            
+            const categoryData = faqData[currentCategory];
+            if (!categoryData.content) {
+                categoryData.content = [];
+            }
+            
+            // 检查子主题是否已存在
+            const exists = categoryData.content.some(item => item.subTopic === subTopicName);
+            if (exists) {
+                showNotification('子主题已存在', 'error');
+                return;
+            }
+            
+            categoryData.content.push({
+                subTopic: subTopicName,
+                qa: []
+            });
+            
+            unsavedChanges = true;
+            renderSubtopicList(currentCategory);
+            showNotification('子主题已添加', 'success');
+        }
+        
+        // 编辑子主题
+        function editSubtopic(category, index) {
+            const subtopic = faqData[category].content[index];
+            const newName = prompt('请输入新的子主题名称:', subtopic.subTopic);
+            
+            if (!newName || newName.trim() === '') return;
+            
+            // 检查名称是否已存在
+            const exists = faqData[category].content.some((item, i) => i !== index && item.subTopic === newName);
+            if (exists) {
+                showNotification('子主题名称已存在', 'error');
+                return;
+            }
+            
+            subtopic.subTopic = newName;
+            unsavedChanges = true;
+            renderSubtopicList(category);
+            showNotification('子主题已更新', 'success');
+        }
+        
+        // 删除子主题
+        function deleteSubtopic(category, index) {
+            if (!confirm('确定要删除此子主题及其所有问答对吗？')) return;
+            
+            faqData[category].content.splice(index, 1);
+            unsavedChanges = true;
+            renderSubtopicList(category);
+            showNotification('子主题已删除', 'success');
+        }
+        
+        // 添加新问答对
+        function addNewQaPair(category, subtopicIndex) {
+            // 使用模态框或简单的prompt
+            const q = prompt('请输入问题:');
+            if (!q || q.trim() === '') return;
+            
+            const a = prompt('请输入回答:');
+            if (!a || a.trim() === '') return;
+            
+            faqData[category].content[subtopicIndex].qa.push({
+                q: q,
+                a: a
+            });
+            
+            unsavedChanges = true;
+            renderSubtopicList(category);
+            showNotification('问答对已添加', 'success');
+        }
+        
+        // 编辑问答对
+        function editQaPair(category, subtopicIndex, qaIndex) {
+            const qa = faqData[category].content[subtopicIndex].qa[qaIndex];
+            
+            const newQ = prompt('请输入新的问题:', qa.q);
+            if (!newQ || newQ.trim() === '') return;
+            
+            const newA = prompt('请输入新的回答:', qa.a);
+            if (!newA || newA.trim() === '') return;
+            
+            qa.q = newQ;
+            qa.a = newA;
+            
+            unsavedChanges = true;
+            renderSubtopicList(category);
+            showNotification('问答对已更新', 'success');
+        }
+        
+        // 删除问答对
+        function deleteQaPair(category, subtopicIndex, qaIndex) {
+            if (!confirm('确定要删除此问答对吗？')) return;
+            
+            faqData[category].content[subtopicIndex].qa.splice(qaIndex, 1);
+            unsavedChanges = true;
+            renderSubtopicList(category);
+            showNotification('问答对已删除', 'success');
+        }
+        
+        // 移动问答对
+        function moveQaPair(category, subtopicIndex, qaIndex, direction) {
+            const qaArray = faqData[category].content[subtopicIndex].qa;
+            
+            if (direction === 'up' && qaIndex > 0) {
+                const temp = qaArray[qaIndex];
+                qaArray[qaIndex] = qaArray[qaIndex - 1];
+                qaArray[qaIndex - 1] = temp;
+            } else if (direction === 'down' && qaIndex < qaArray.length - 1) {
+                const temp = qaArray[qaIndex];
+                qaArray[qaIndex] = qaArray[qaIndex + 1];
+                qaArray[qaIndex + 1] = temp;
+            }
+            
+            unsavedChanges = true;
+            renderSubtopicList(category);
+        }
+        
+        // 保存所有数据
+        function saveAllData() {
+            // 在实际应用中，这里应该是一个API调用
+            // 为了演示，我们使用localStorage
+            localStorage.setItem('faqData', JSON.stringify(faqData));
+            
+            // 在生产环境中应使用适当的API端点
+            const jsonString = JSON.stringify(faqData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            
+            // 创建一个下载链接
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'faq-data.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            unsavedChanges = false;
+            showNotification('数据已保存', 'success');
+        }
+        
+        // 导出JSON
+        function exportJson() {
+            const jsonString = JSON.stringify(faqData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `faq-data-${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            showNotification('JSON已导出', 'success');
+        }
+        
+        // 导入JSON
+        function importJson() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'application/json';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (confirm('导入将覆盖当前所有数据，是否继续？')) {
+                            faqData = data;
+                            renderCategoryList();
+                            currentCategory = null;
+                            unsavedChanges = true;
+                            showNotification('JSON已导入', 'success');
+                        }
+                    } catch (error) {
+                        showNotification('JSON解析失败: ' + error.message, 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+        
+        // 处理聊天导入
+        function processChatImport() {
+            const chatText = document.getElementById('chatImport').value.trim();
+            if (!chatText) {
+                showNotification('请输入聊天记录', 'error');
+                return;
+            }
+            
+            const date = document.getElementById('updateDate').value;
+            if (!date) {
+                showNotification('请选择日期', 'error');
+                return;
+            }
+            
+            const qaArray = [];
+            let previewBlocks = [];
+            let currentQ = '';
+            let currentA = '';
+            let lines = chatText.split('\n');
+            let collectingAnswer = false;
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+
+                // 处理Markdown标题
+                if (/^#+\s?/.test(line)) {
+                    // 如果正在收集回答，先保存当前问答
+                    if (currentQ) {
+                        qaArray.push({ q: currentQ, a: currentA });
+                        previewBlocks.push({ type: 'qa', q: currentQ, a: currentA });
+                        currentQ = '';
+                        currentA = '';
+                        collectingAnswer = false;
+                    }
+                    previewBlocks.push({ type: 'title', text: line.replace(/^#+\s?/, '') });
+                    continue;
+                }
+
+                // 支持 Q:、q:、**Q:**、**q:** 开头
+                if (
+                    line.startsWith('Q:') || line.startsWith('q:') ||
+                    line.startsWith('**Q:**') || line.startsWith('**q:**')
+                ) {
+                    // 如果正在收集回答，先保存当前问答
+                    if (currentQ) {
+                        qaArray.push({ q: currentQ, a: currentA });
+                        previewBlocks.push({ type: 'qa', q: currentQ, a: currentA });
+                        currentQ = '';
+                        currentA = '';
+                        collectingAnswer = false;
+                    }
+                    // 处理Markdown格式
+                    if (line.startsWith('**Q:**') || line.startsWith('**q:**')) {
+                        currentQ = line.replace(/^\*\*Q:\*\*\s*/i, '');
+                    } else {
+                        currentQ = line.substring(2).trim();
+                    }
+                    continue;
+                }
+                // 支持 A:、a:、**A:**、**a:** 开头
+                if (
+                    line.startsWith('A:') || line.startsWith('a:') ||
+                    line.startsWith('**A:**') || line.startsWith('**a:**')
+                ) {
+                    // 如果当前有Q，进入收集回答模式
+                    collectingAnswer = true;
+                    if (line.startsWith('**A:**') || line.startsWith('**a:**')) {
+                        currentA = line.replace(/^\*\*A:\*\*\s*/i, '');
+                    } else {
+                        currentA = line.substring(2).trim();
+                    }
+                    continue;
+                }
+                // 收集多行回答内容
+                if (collectingAnswer) {
+                    if (currentA) {
+                        currentA += '\n' + line;
+                    } else {
+                        currentA = line;
+                    }
+                    continue;
+                }
+                // 追加到当前问题（极少用到）
+                if (currentQ && !currentA) {
+                    currentQ += ' ' + line;
+                }
+            }
+            // 处理最后一组
+            if (currentQ) {
+                qaArray.push({
+                    q: currentQ,
+                    a: currentA
+                });
+                previewBlocks.push({ type: 'qa', q: currentQ, a: currentA });
+            }
+            // 获取第一个标题（如有）
+            let firstTitle = '';
+            for (let block of previewBlocks) {
+                if (block.type === 'title') {
+                    firstTitle = block.text;
+                    break;
+                }
+            }
+            window.processedTitle = firstTitle;
+            // 显示预览
+            const previewContent = document.getElementById('previewContent');
+            previewContent.innerHTML = '';
+            previewBlocks.forEach(block => {
+                if (block.type === 'title') {
+                    const titleDiv = document.createElement('div');
+                    titleDiv.style.fontWeight = 'bold';
+                    titleDiv.style.fontSize = '18px';
+                    titleDiv.style.margin = '10px 0 5px 0';
+                    titleDiv.textContent = block.text;
+                    previewContent.appendChild(titleDiv);
+                } else if (block.type === 'qa') {
+                    const qDiv = document.createElement('div');
+                    qDiv.innerHTML = `<strong>Q:</strong> ${block.q}`;
+                    qDiv.style.marginBottom = '6px';
+                    const aDiv = document.createElement('div');
+                    aDiv.style.marginLeft = '0';
+                    aDiv.style.paddingLeft = '0';
+                    aDiv.style.whiteSpace = 'pre-line';
+                    aDiv.innerHTML = `<strong>A:</strong> <span style="display:inline-block; vertical-align:top; margin-left:4px;">${block.a ? block.a.replace(/\n/g, '<br>') : '<em>无回答</em>'}</span>`;
+                    const container = document.createElement('div');
+                    container.className = 'qa-pair';
+                    container.appendChild(qDiv);
+                    container.appendChild(aDiv);
+                    previewContent.appendChild(container);
+                }
+            });
+            document.getElementById('chatPreview').classList.remove('hidden');
+            // 保存到全局变量供后续使用
+            window.processedQaArray = qaArray;
+            window.processedDate = date;
+        }
+        
+        // 保存更新到每日更新分类
+        function saveUpdate() {
+            if (!window.processedQaArray || !window.processedDate) {
+                showNotification('没有处理后的数据', 'error');
+                return;
+            }
+            
+            // 确保每日更新分类存在
+            if (!faqData['每日更新']) {
+                faqData['每日更新'] = {
+                    icon: '🗓️',
+                    content: []
+                };
+            }
+            
+            const dateFormatted = new Date(window.processedDate).toISOString().slice(0, 10);
+            const subtopicName = `${dateFormatted} 聊天记录`;
+            
+            // 检查是否已存在该日期的子主题
+            let found = false;
+            let subtopicIndex = -1;
+            
+            faqData['每日更新'].content.forEach((subtopic, index) => {
+                if (subtopic.subTopic === subtopicName) {
+                    found = true;
+                    subtopicIndex = index;
+                }
+            });
+            
+            if (found) {
+                // 追加或替换
+                if (confirm(`已存在 ${subtopicName}，是否替换？点击取消则追加`)) {
+                    faqData['每日更新'].content[subtopicIndex].qa = window.processedQaArray;
+                    faqData['每日更新'].content[subtopicIndex].title = window.processedTitle || '';
+                } else {
+                    faqData['每日更新'].content[subtopicIndex].qa = 
+                        faqData['每日更新'].content[subtopicIndex].qa.concat(window.processedQaArray);
+                    // 不覆盖title
+                }
+            } else {
+                // 创建新子主题
+                faqData['每日更新'].content.push({
+                    subTopic: subtopicName,
+                    qa: window.processedQaArray,
+                    title: window.processedTitle || ''
+                });
+            }
+            
+            unsavedChanges = true;
+            showNotification('聊天记录已添加到每日更新', 'success');
+            document.getElementById('chatImport').value = '';
+            document.getElementById('chatPreview').classList.add('hidden');
+            
+            // 如果当前在查看每日更新分类，则刷新显示
+            if (currentCategory === '每日更新') {
+                renderSubtopicList(currentCategory);
+            }
+        }
+        
+        // 显示通知
+        function showNotification(message, type) {
+            const notificationsContainer = document.getElementById('notifications');
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            notificationsContainer.appendChild(notification);
+            
+            // 自动移除
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html> 
